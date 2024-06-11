@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
-	@apply bg-black min-h-screen text-white
+	@apply bg-black text-white
 }

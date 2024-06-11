@@ -1,18 +1,29 @@
 import Link from 'next/link'
+import Header from '@/components/auth/header'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "FuckIt | Get Started",
+  description: "Fuck it get started page",
+}
 
 function GetStarted() {
   return (
     <>
-      <header className='container mx-auto h-20 flex justify-between items-center border-b-2 border-white'>
-          <Link href={'/'}>
-            <h2 className='text-2xl font-semibold'>FuckIt</h2>
-          </Link>
-          <nav className='flex gap-5'>
-            <Link href={'/auth'}>Get Started</Link>
-            <Link href={'/news'}>News</Link>
-            <Link href={'/terms-of-use'}>Terms of Use</Link>
-          </nav>
-      </header>
+      <Header />
+      <div className='container mx-auto mt-5 px-5 flex flex-col'>
+        <h2 className='font-medium text-5xl mt-20 ml-10'>
+          <p>FuckIt</p>
+          <span className='ml-20 flex items-center'>
+            <span>- new era of messaging</span>
+            <span className="loading loading-infinity loading-lg ml-5 mt-2"></span>
+          </span>
+        </h2>
+        <div className='mt-10 flex gap-5 justify-end'>
+          <Link href={'/auth/sign-in'} className="btn btn-outline">Get Started</Link>
+          <Link href={'#'} className="btn btn-outline">Download Now</Link>
+        </div>
+      </div>
     </>
   )
 }

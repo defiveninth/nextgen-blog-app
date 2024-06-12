@@ -7,7 +7,7 @@ function Routing({ route }: { route: Array<IRoute> }) {
 			<ul>
 				{
 					route.map(r => (
-						<li>
+						<li key={r.path}>
 							<Link href={r.path} className='font-medium'>
 								<r.icon size={15} className='mr-2' />
 								<span>{r.name}</span>

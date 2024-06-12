@@ -1,4 +1,4 @@
-import { LogIn, Waypoints } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, LogIn, Waypoints } from 'lucide-react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import IRoute from '@/types/route'
@@ -6,6 +6,7 @@ import IRoute from '@/types/route'
 import Layout from '@/components/auth/layout'
 import Header from '@/components/auth/header'
 import Routing from '@/components/common/routing'
+import Heading from '@/components/auth/heading'
 
 export const metadata: Metadata = {
   title: "FuckIt | Sign In",
@@ -31,8 +32,16 @@ function SignIn() {
       <Header />
       <Layout>
         <Routing route={route} />
-        <h2 className='text-2xl font-semibold mb-1 mt-5'>Sign In:</h2>
-        <p>Please enter your details to continue</p>
+        <Heading title='Welcome Back!' />
+        <p>Please enter your details to continue:</p>
+        <p className='mt-5'>
+          <span>Forgot Password? </span>
+          <Link href={'/auth/forgot-password'} className='text-blue-500 hover:text-blue-600 duration-150 hover:underline'>Restore</Link>
+        </p>
+        <p>
+          <span>Don't have an account? </span>
+          <Link href={'/auth/sign-up'} className='text-blue-500 hover:text-blue-600 duration-150 hover:underline'>Sign Up</Link>
+        </p>
         <form className='mx-auto mt-16 flex flex-col gap-5'>
           <input
             type="text"
@@ -44,12 +53,10 @@ function SignIn() {
             placeholder="Enter your password:"
             className="py-4 px-2 w-72 outline-none transition-colors duration-500 border-b-transparent focus:border-b-white border-b-2"
           />
-          <div className='flex justify-end mt-[-15px]'>
-            <Link href={'/auth/forgot-password'} className='text-blue-500 text-sm'>
-              Forgot password?
-            </Link>
-          </div>
-          <button className="btn btn-outline">Sign In</button>
+          <button className="btn btn-outline">
+            <span>Sign In</span>
+            <ArrowRight size={19} className='ml-[-5px]' />
+          </button>
         </form>
       </Layout>
     </>

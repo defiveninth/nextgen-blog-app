@@ -7,9 +7,9 @@ function Header() {
 				<h2 className='text-2xl font-semibold'>FuckIt</h2>
 			</Link>
 			<nav className='flex gap-5'>
-				<Link href={'/auth'}>Get Started</Link>
-				<Link href={'/news'}>News</Link>
-				<Link href={'/terms-of-use'}>Terms of Use</Link>
+				<Link className='hover:text-gray-300 duration-150' href={'/auth'}>Get Started</Link>
+				<Link className='hover:text-gray-300 duration-150' href={'/news'}>News</Link>
+				<Link className='hover:text-gray-300 duration-150' href={'/terms-of-use'}>Terms of Use</Link>
 			</nav>
 		</header>
 	)

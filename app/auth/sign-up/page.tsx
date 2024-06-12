@@ -36,7 +36,7 @@ function SignUp() {
         <p>Get started with your email address:</p>
         <p className='mt-5'>
           <span>Already have an account? </span>
-          <Link href={'/auth/forgot-password'} className='text-blue-500 hover:text-blue-600 duration-150 hover:underline'>Sign In</Link>
+          <Link href={'/auth/sign-in'} className='text-blue-500 hover:text-blue-600 duration-150 hover:underline'>Sign In</Link>
         </p>
         <form className='mx-auto mt-16 flex flex-col gap-5'>
           <input

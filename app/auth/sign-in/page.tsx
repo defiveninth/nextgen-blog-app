@@ -39,7 +39,7 @@ function SignIn() {
           <Link href={'/auth/forgot-password'} className='text-blue-500 hover:text-blue-600 duration-150 hover:underline'>Restore</Link>
         </p>
         <p>
-          <span>Don't have an account? </span>
+          <span>Don&apos;t have an account? </span>
           <Link href={'/auth/sign-up'} className='text-blue-500 hover:text-blue-600 duration-150 hover:underline'>Sign Up</Link>
         </p>
         <form className='mx-auto mt-16 flex flex-col gap-5'>

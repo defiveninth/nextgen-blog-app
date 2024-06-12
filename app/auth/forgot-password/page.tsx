@@ -33,7 +33,7 @@ function ForgotPassword() {
       <Layout>
         <Routing route={route} />
         <Heading title='Restore your password:' />
-        <p>First of all you'll need to verify yourself!</p>
+        <p>First of all you&apos;ll need to verify yourself!</p>
         <p className='mt-5'>
           <span>I remember my password? </span>
           <Link href={'/auth/sign-in'} className='text-blue-500 hover:text-blue-600 duration-150 hover:underline'>Sign In</Link>

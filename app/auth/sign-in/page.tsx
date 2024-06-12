@@ -1,5 +1,5 @@
-import { ArrowRight, ArrowUpRight, LogIn, Waypoints } from 'lucide-react'
 import Link from 'next/link'
+import { ArrowRight, LogIn, Waypoints } from 'lucide-react'
 import type { Metadata } from 'next'
 import IRoute from '@/types/route'
 
@@ -49,7 +49,7 @@ function SignIn() {
             className="py-4 px-2 w-72 outline-none transition-colors duration-500 border-b-transparent focus:border-b-white border-b-2"
           />
           <input
-            type="text"
+            type="password"
             placeholder="Enter your password:"
             className="py-4 px-2 w-72 outline-none transition-colors duration-500 border-b-transparent focus:border-b-white border-b-2"
           />

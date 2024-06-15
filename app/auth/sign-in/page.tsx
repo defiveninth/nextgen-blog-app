@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, LogIn, Waypoints } from 'lucide-react'
+import { LogIn, Waypoints } from 'lucide-react'
 import type { Metadata } from 'next'
 import IRoute from '@/types/route'
 
@@ -7,6 +7,7 @@ import Layout from '@/components/auth/layout'
 import Header from '@/components/auth/header'
 import Routing from '@/components/common/routing'
 import Heading from '@/components/auth/heading'
+import SignInForm from '@/components/auth/client/sign-in.form'
 
 export const metadata: Metadata = {
   title: "FuckIt | Sign In",
@@ -42,22 +43,7 @@ function SignIn() {
           <span>Don&apos;t have an account? </span>
           <Link href={'/auth/sign-up'} className='text-blue-500 hover:text-blue-600 duration-150 hover:underline'>Sign Up</Link>
         </p>
-        <form className='mx-auto mt-16 flex flex-col gap-5'>
-          <input
-            type="text"
-            placeholder="Enter your email or username:"
-            className="py-4 px-2 w-72 outline-none transition-colors duration-500 border-b-transparent focus:border-b-white border-b-2"
-          />
-          <input
-            type="password"
-            placeholder="Enter your password:"
-            className="py-4 px-2 w-72 outline-none transition-colors duration-500 border-b-transparent focus:border-b-white border-b-2"
-          />
-          <button className="btn btn-outline">
-            <span>Sign In</span>
-            <ArrowRight size={19} className='ml-[-5px]' />
-          </button>
-        </form>
+        <SignInForm />
       </Layout>
     </>
   )

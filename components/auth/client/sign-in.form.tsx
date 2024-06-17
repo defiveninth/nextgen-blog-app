@@ -34,13 +34,12 @@ const SignInForm = () => {
       const data = await res.json()
       if (data.user) {
         signIn(data.user.token)
+        setError('')
       } else {
         setError(data.message)
-        console.error('Sign-in failed:', data.message)
       }
     } catch (err) {
       setError('An error occurred during sign-in. Please try again.')
-      console.error('Sign-in error:', err)
     } finally {
       setIsLoading(false)
     }

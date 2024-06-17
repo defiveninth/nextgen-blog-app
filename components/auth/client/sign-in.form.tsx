@@ -2,6 +2,7 @@
 
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
+import signIn from '@/actions/auth/sign-in'
 
 const SignInForm = () => {
   const [formData, setFormData] = useState({ eu: '', password: '' })
@@ -32,7 +33,7 @@ const SignInForm = () => {
 
       const data = await res.json()
       if (data.user) {
-        console.log('Sign-in successful:', data)
+        signIn(data.user.token)
       } else {
         setError(data.message)
         console.error('Sign-in failed:', data.message)
@@ -43,7 +44,7 @@ const SignInForm = () => {
     } finally {
       setIsLoading(false)
     }
-  }
+  } 
 
   return (
     <form onSubmit={handleSubmit} className='mx-auto mt-16 flex flex-col gap-5'>

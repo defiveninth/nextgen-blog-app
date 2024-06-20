@@ -3,6 +3,7 @@
 import { ChangeEvent, useRef, KeyboardEvent, useState, useEffect } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { redirect, useSearchParams } from 'next/navigation'
+import signIn from '@/actions/auth/sign-in'
 
 const VerifyEmailForm = () => {
 	const inputsRef = useRef<(HTMLInputElement | null)[]>([])
@@ -46,6 +47,12 @@ const VerifyEmailForm = () => {
 		setIsLoading(true)
 		setError(null)
 
+		if (code.some(c => c === '')) {
+			setError('Verify Code is Required')
+			setIsLoading(false)
+			return
+		}
+
 		const verifyCode = +(code.join(''))
 
 		try {
@@ -62,7 +69,7 @@ const VerifyEmailForm = () => {
 			}
 
 			const data = await response.json()
-			alert('Email verified successfully!')
+			signIn(data.user.token)
 		} catch (err) {
 			setError('Verification failed. Please try again.')
 		} finally {

@@ -54,6 +54,7 @@ const SignInForm = () => {
         value={formData.eu}
         onChange={handleChange}
         className="py-4 px-2 w-72 outline-none transition-colors duration-500 border-b-transparent focus:border-b-white border-b-2"
+        minLength={5}
       />
       <input
         type="password"
@@ -62,6 +63,7 @@ const SignInForm = () => {
         value={formData.password}
         onChange={handleChange}
         className="py-4 px-2 w-72 outline-none transition-colors duration-500 border-b-transparent focus:border-b-white border-b-2"
+        minLength={5}
       />
       <button type="submit" className="btn btn-outline" disabled={isLoading}>
         {isLoading ? 'Signing In...' : (

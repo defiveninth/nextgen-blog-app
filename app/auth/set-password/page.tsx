@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { KeyRound, LockKeyhole, Waypoints } from 'lucide-react'
 import IRoute from '@/types/route'
@@ -48,7 +49,9 @@ const SetPassword = () => {
           <span>Want a new account? </span>
           <Link href={'/auth/sign-up'} className='text-blue-500 hover:text-blue-600 duration-150 hover:underline'>Sign Up</Link>
         </p>
-        <SetPasswordForm />
+        <Suspense>
+          <SetPasswordForm />
+        </Suspense>
       </Layout>
     </>
   )

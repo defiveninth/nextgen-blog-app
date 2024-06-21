@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { ShieldCheck, Waypoints } from 'lucide-react'
 import IRoute from '@/types/route'
@@ -8,7 +9,6 @@ import Heading from '@/components/auth/heading'
 import Layout from '@/components/auth/layout'
 import Routing from '@/components/common/routing'
 import VerifyEmailForm from '@/components/auth/client/verify-email.form'
-import { Suspense } from 'react'
 
 export const metadata: Metadata = {
 	title: "FuckIt | Verify Email",

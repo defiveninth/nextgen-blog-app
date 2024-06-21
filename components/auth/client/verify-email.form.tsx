@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, useRef, KeyboardEvent, useState, useEffect } from 'react'
+import { ChangeEvent, useRef, KeyboardEvent, useState, useEffect, FormEvent } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { redirect, useSearchParams } from 'next/navigation'
 import signIn from '@/actions/auth/sign-in'
@@ -42,7 +42,7 @@ const VerifyEmailForm = () => {
 		inputsRef.current[index] = el
 	}
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		setIsLoading(true)
 		setError(null)

@@ -28,7 +28,7 @@ const route: Array<IRoute> = [
   {
     name: 'Set Password',
     icon: KeyRound,
-    path: '/auth/forgot-password/set-password'
+    path: '/auth/set-password'
   }
 ]
 

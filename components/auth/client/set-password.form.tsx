@@ -15,7 +15,7 @@ const SetPasswordForm = () => {
 
   return (
 	<form className='mx-auto mt-16 flex flex-col gap-5'>
-		{ user }
+		
 	</form>
   )
 }

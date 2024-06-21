@@ -8,6 +8,7 @@ import Heading from '@/components/auth/heading'
 import Layout from '@/components/auth/layout'
 import Routing from '@/components/common/routing'
 import VerifyEmailForm from '@/components/auth/client/verify-email.form'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
 	title: "FuckIt | Verify Email",
@@ -39,7 +40,9 @@ const Verify = () => {
 					<span>Already have an account? </span>
 					<Link href={'/auth/sign-in'} className='text-blue-500 hover:text-blue-600 duration-150 hover:underline'>Sign In</Link>
 				</p>
-				<VerifyEmailForm />
+				<Suspense>
+					<VerifyEmailForm />
+				</Suspense>
 			</Layout>
 		</>
 	)

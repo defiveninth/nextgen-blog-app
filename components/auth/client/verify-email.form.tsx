@@ -1,46 +1,22 @@
 'use client'
 
-import { ChangeEvent, useRef, KeyboardEvent, useState, useEffect, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { redirect, useSearchParams } from 'next/navigation'
 import signIn from '@/actions/auth/sign-in'
+import CodeInput from '../code-input'
 
 const VerifyEmailForm = () => {
-	const inputsRef = useRef<(HTMLInputElement | null)[]>([])
 	const [email, setEmail] = useState('')
+	const [code, setCode] = useState<string[]>(['', '', '', ''])
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
-	const [code, setCode] = useState<string[]>(['', '', '', ''])
 	const searchParams = useSearchParams()
 
 	useEffect(() => {
 		if (searchParams.has('email')) setEmail(searchParams.get('email') as string)
 		else redirect('/auth/sign-up')
 	}, [])
-
-	const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-		const value = e.target.value
-		if (value.match(/[0-9]/)) {
-			const newCode = [...code]
-			newCode[index] = value
-			setCode(newCode)
-			if (index < inputsRef.current.length - 1) {
-				inputsRef.current[index + 1]?.focus()
-			}
-		} else {
-			e.target.value = ''
-		}
-	}
-
-	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
-		if (e.key === 'Backspace' && !e.currentTarget.value && index > 0) {
-			inputsRef.current[index - 1]?.focus()
-		}
-	}
-
-	const setInputRef = (el: HTMLInputElement | null, index: number) => {
-		inputsRef.current[index] = el
-	}
 
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -79,19 +55,7 @@ const VerifyEmailForm = () => {
 
 	return (
 		<form className='mx-auto mt-16 flex flex-col gap-5' onSubmit={handleSubmit}>
-			<div className='flex gap-5'>
-				{[0, 1, 2, 3].map((i) => (
-					<input
-						key={i}
-						type="text"
-						className='w-14 h-14 outline-none text-center rounded-lg focus:border-white border-2 border-transparent duration-150'
-						maxLength={1}
-						onChange={(e) => handleChange(e, i)}
-						onKeyDown={(e) => handleKeyDown(e, i)}
-						ref={(el) => setInputRef(el, i)}
-					/>
-				))}
-			</div>
+			<CodeInput code={code} setCode={setCode} />
 			{error && <p className="text-red-500">{error}</p>}
 			<button type="submit" className="btn btn-outline" disabled={isLoading}>
 				{isLoading ? 'Verifying...' : (

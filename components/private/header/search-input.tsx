@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 const SearchInput = () => {
 	return (
-		<div className='ml-20'>
+		<div className='ml-5'>
 			<label className="input input-bordered flex items-center gap-2 rounded-md">
 				<input type="text" className="grow" placeholder="Search" />
 				<kbd className="kbd kbd-sm">⌘</kbd>

@@ -10,8 +10,8 @@ import Heading from '@/components/auth/heading'
 import SignInForm from '@/components/auth/client/sign-in.form'
 
 export const metadata: Metadata = {
-  title: "FuckIt | Sign In",
-  description: "FuckIt | Sign In",
+  title: "Murdergram | Sign In",
+  description: "Murdergram | Sign In",
 }
 
 const route: Array<IRoute> = [

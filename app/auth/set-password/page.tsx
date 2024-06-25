@@ -11,8 +11,8 @@ import Heading from '@/components/auth/heading'
 import SetPasswordForm from '@/components/auth/client/set-password.form'
 
 export const metadata: Metadata = {
-  title: "FuckIt | Set Password",
-  description: "FuckIt | Set Password",
+  title: "Murdergram | Set Password",
+  description: "Murdergram | Set Password",
 }
 
 const route: Array<IRoute> = [

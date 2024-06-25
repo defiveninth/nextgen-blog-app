@@ -10,8 +10,8 @@ import Heading from '@/components/auth/heading'
 import ForgotPasswordForm from '@/components/auth/client/forgot-password.form'
 
 export const metadata: Metadata = {
-  title: "FuckIt | Sign Up",
-  description: "FuckIt | Sign Up",
+  title: "Murdergram | Sign Up",
+  description: "Murdergram | Sign Up",
 }
 
 const route: Array<IRoute> = [

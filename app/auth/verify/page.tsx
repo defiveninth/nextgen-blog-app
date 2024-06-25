@@ -11,8 +11,8 @@ import Routing from '@/components/common/routing'
 import VerifyEmailForm from '@/components/auth/client/verify-email.form'
 
 export const metadata: Metadata = {
-	title: "FuckIt | Verify Email",
-	description: "FuckIt | Verify Email",
+	title: "Murdergram | Verify Email",
+	description: "Murdergram | Verify Email",
 }
 
 const route: Array<IRoute> = [

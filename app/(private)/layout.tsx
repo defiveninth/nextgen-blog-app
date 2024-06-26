@@ -4,6 +4,7 @@ import ReadOnlyChild from '@/types/readonly-child'
 import Header from '@/components/private/header'
 import Wrapper from '@/components/private/wrapper'
 import Nav from '@/components/private/nav'
+import Content from '@/components/private/content'
 
 const PrivateLayout: FC<ReadOnlyChild> = ({ children }) => {
 	return (
@@ -11,7 +12,9 @@ const PrivateLayout: FC<ReadOnlyChild> = ({ children }) => {
 			<Header />
 			<Wrapper>
 				<Nav />
-				{ children }
+				<Content>
+					{children}
+				</Content>
 			</Wrapper>
 		</>
 	)

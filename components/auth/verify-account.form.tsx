@@ -1,50 +1,39 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useParams } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from '@/hooks/use-toast'
+import useActivateAccount from '@/actions/auth/activate-account'
+import { Loader } from 'lucide-react'
 
 export default function VerifyAccountForm() {
+	const { verifyToken }: { verifyToken: string } = useParams()
+	const { activateAccount, isLoading, error } = useActivateAccount()
 	const [newPassword, setNewPassword] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
 	const [name, setName] = useState('')
-	const [age, setAge] = useState('')
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		if (!newPassword || !confirmPassword || !name || !age) {
+
+		const success = await activateAccount(verifyToken, name, newPassword)
+
+		if (success) {
 			toast({
-				title: "Error",
-				description: "Please fill in all fields.",
-				variant: "destructive",
+				title: 'Success!',
+				description: 'Your account has been verified and updated.',
 			})
-			return
-		}
-		if (newPassword !== confirmPassword) {
+		} else if (error) {
 			toast({
-				title: "Error",
-				description: "Passwords do not match.",
-				variant: "destructive",
+				title: 'Error',
+				description: error,
+				variant: 'destructive',
 			})
-			return
 		}
-		if (isNaN(Number(age)) || Number(age) <= 0) {
-			toast({
-				title: "Error",
-				description: "Please enter a valid age.",
-				variant: "destructive",
-			})
-			return
-		}
-		// Here you would typically send the data to your backend for account verification
-		console.log('Form submitted:', { newPassword, name, age })
-		toast({
-			title: "Success!",
-			description: "Your account has been verified and updated.",
-		})
 	}
 
 	return (
@@ -65,18 +54,6 @@ export default function VerifyAccountForm() {
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 								required
-							/>
-						</div>
-						<div className="space-y-2">
-							<Label htmlFor="age">Age</Label>
-							<Input
-								id="age"
-								type="number"
-								placeholder="Enter your age"
-								value={age}
-								onChange={(e) => setAge(e.target.value)}
-								required
-								min="1"
 							/>
 						</div>
 						<div className="space-y-2">
@@ -103,11 +80,15 @@ export default function VerifyAccountForm() {
 						</div>
 					</CardContent>
 					<CardFooter>
-						<Button type="submit" className="w-full">Verify Account</Button>
+						<Button type="submit" className="w-full" disabled={isLoading || !newPassword || !confirmPassword || !name}>
+							{isLoading ? <>
+								<Loader className='animate-spin' />
+								<span>Validating...</span>
+							</> : 'Verify Account'}
+						</Button>
 					</CardFooter>
 				</form>
 			</Card>
 		</div>
 	)
 }
-

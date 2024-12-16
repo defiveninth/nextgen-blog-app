@@ -8,7 +8,8 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
-import useSignIn from '@/actions/auth/useSignIn'
+import useSignIn from '@/actions/auth/sign-in'
+import { Loader } from 'lucide-react'
 
 export default function SignInForm() {
 	const [email, setEmail] = useState('abdurrauf.sakenov@narxoz.kz')
@@ -73,7 +74,10 @@ export default function SignInForm() {
 				</CardContent>
 				<CardFooter className="flex flex-col gap-5">
 					<Button type="submit" className="w-full" disabled={isLoading}>
-						{isLoading ? 'Signing In...' : 'Sign In'}
+						{isLoading ? <>
+							<Loader className='animate-spin' />
+							<span>Validating...</span>
+						</> : 'Sign In'}
 					</Button>
 					<Button variant="outline" className="w-full" type="button" onClick={() => router.push('/auth/sign-up')}>
 						Create account

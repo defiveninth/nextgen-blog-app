@@ -16,6 +16,7 @@ import {
 import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
 import useCreateAccount from '@/actions/auth/create-account'
+import { Loader } from 'lucide-react'
 
 export default function SignUpForm() {
 	const [email, setEmail] = useState('')
@@ -83,7 +84,10 @@ export default function SignUpForm() {
 						className="w-full"
 						disabled={!acceptTerms || !email || isLoading}
 					>
-						{isLoading ? 'Signing Up...' : 'Sign Up'}
+						{isLoading ? <>
+							<Loader className='animate-spin' />
+							<span>Validating...</span>
+						</> : 'Sign Up'}
 					</Button>
 					<Button
 						type="button"

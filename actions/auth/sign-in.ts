@@ -3,7 +3,6 @@ import { useState } from 'react'
 export default function useSignIn() {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [error, setError] = useState<string | null>(null)
-	const [token, setToken] = useState<string | null>(null)
 
 	const signIn = async (email: string, password: string): Promise<boolean> => {
 		setIsLoading(true)
@@ -21,11 +20,6 @@ export default function useSignIn() {
 			if (!response.ok) {
 				throw new Error(data.error || 'Invalid email or password.')
 			}
-
-			setToken(data.token)
-
-			localStorage.setItem('authToken', data.token)
-
 			return true
 		} catch (err: any) {
 			setError(err.message || 'An error occurred during sign-in.')
@@ -38,7 +32,6 @@ export default function useSignIn() {
 	return {
 		isLoading,
 		error,
-		token,
 		signIn,
 	} as const
 }

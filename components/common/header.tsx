@@ -26,10 +26,12 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet"
+import { useRouter } from 'next/navigation'
 
 export function Header() {
 	const [searchValue, setSearchValue] = useState('')
 	const isAuthenticated = true
+	const router = useRouter()
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -199,7 +201,7 @@ export function Header() {
 												<span>Settings</span>
 											</DropdownMenuItem>
 											<DropdownMenuSeparator />
-											<DropdownMenuItem>
+											<DropdownMenuItem onClick={() => router.push('/api/auth/sign-out')}>
 												<LogOut className="mr-2 h-4 w-4" />
 												<span>Sign Out</span>
 											</DropdownMenuItem>
@@ -208,10 +210,10 @@ export function Header() {
 								</>
 							) : (
 								<div className="flex items-center space-x-4">
-									<Button variant="outline" onClick={() => { /* Sign In logic */ }}>
+									<Button variant="outline" onClick={() => { }}>
 										Sign In
 									</Button>
-									<Button onClick={() => { /* Sign Up logic */ }}>
+									<Button onClick={() => { }}>
 										Sign Up
 									</Button>
 								</div>

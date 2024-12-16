@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Search, ChevronDown, Menu, LogOut, User, Settings, HomeIcon, Rss, ChartBarStacked } from 'lucide-react'
+import { Search, ChevronDown, LogOut, User, Settings, HomeIcon, Rss, ChartBarStacked } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ModeToggle } from '../theme/switch'
@@ -12,7 +12,6 @@ import {
 	NavigationMenuLink,
 	NavigationMenuList,
 } from "@/components/ui/navigation-menu"
-import { Badge } from "@/components/ui/badge"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -30,6 +29,7 @@ import {
 
 export function Header() {
 	const [searchValue, setSearchValue] = useState('')
+	const isAuthenticated = true
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -62,58 +62,69 @@ export function Header() {
 								</SheetContent>
 							</Sheet>
 
-							<Sheet>
-								<SheetTrigger asChild>
-									<Button variant="ghost" className="flex items-center space-x-1 px-2">
-										<span>@defive...</span>
-										<ChevronDown className="h-4 w-4" />
+							{isAuthenticated ? (
+								<Sheet>
+									<SheetTrigger asChild>
+										<Button variant="ghost" className="flex items-center space-x-1 px-2">
+											<span>@defive...</span>
+											<ChevronDown className="h-4 w-4" />
+										</Button>
+									</SheetTrigger>
+									<SheetContent side="bottom" className="h-auto">
+										<SheetHeader>
+											<SheetTitle className="text-left">NextGen</SheetTitle>
+										</SheetHeader>
+										<div className="mt-4 space-y-4 mb-5">
+											<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+												<HomeIcon className="mr-2 h-5 w-5" />
+												Home
+											</Button>
+											<Button
+												variant="ghost"
+												className="w-full justify-start"
+												onClick={() => { }}
+											>
+												<Rss className="mr-2 h-5 w-5" />
+												Popular
+											</Button>
+											<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+												<ChartBarStacked className="mr-2 h-5 w-5" />
+												Categories
+											</Button>
+										</div>
+										<SheetHeader>
+											<SheetTitle className="text-left">Profile actions</SheetTitle>
+										</SheetHeader>
+										<div className="mt-4 space-y-4">
+											<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+												<User className="mr-2 h-5 w-5" />
+												My Profile
+											</Button>
+											<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+												<Settings className="mr-2 h-5 w-5" />
+												Settings
+											</Button>
+											<Button
+												variant="ghost"
+												className="w-full justify-start text-red-500 hover:text-red-500 hover:bg-red-50"
+												onClick={() => { }}
+											>
+												<LogOut className="mr-2 h-5 w-5" />
+												Logout
+											</Button>
+										</div>
+									</SheetContent>
+								</Sheet>
+							) : (
+								<div className="flex items-center space-x-4">
+									<Button variant="outline" onClick={() => { /* Sign In logic */ }}>
+										Sign In
 									</Button>
-								</SheetTrigger>
-								<SheetContent side="bottom" className="h-auto">
-									<SheetHeader>
-										<SheetTitle className="text-left">NextGen</SheetTitle>
-									</SheetHeader>
-									<div className="mt-4 space-y-4 mb-5">
-										<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
-											<HomeIcon className="mr-2 h-5 w-5" />
-											Home
-										</Button>
-										<Button
-											variant="ghost"
-											className="w-full justify-start"
-											onClick={() => { }}
-										>
-											<Rss className="mr-2 h-5 w-5" />
-											Popular
-										</Button>
-										<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
-											<ChartBarStacked className="mr-2 h-5 w-5" />
-											Categories
-										</Button>
-									</div>
-									<SheetHeader>
-										<SheetTitle className="text-left">Profile actions</SheetTitle>
-									</SheetHeader>
-									<div className="mt-4 space-y-4">
-										<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
-											<User className="mr-2 h-5 w-5" />
-											My Profile
-										</Button>
-										<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
-											<Settings className="mr-2 h-5 w-5" />
-											Settings
-										</Button>
-										<Button
-											variant="ghost"
-											className="w-full justify-start text-red-500 hover:text-red-500 hover:bg-red-50"
-											onClick={() => { }}
-										>
-											<LogOut className="mr-2 h-5 w-5" />
-											Logout
-										</Button>
-									</div>
-								</SheetContent>
-							</Sheet>
+									<Button onClick={() => { /* Sign Up logic */ }}>
+										Sign Up
+									</Button>
+								</div>
+							)}
 							<ModeToggle />
 						</div>
 					</div>
@@ -169,30 +180,42 @@ export function Header() {
 
 						{/* Right Section */}
 						<div className="flex items-center space-x-4">
-							<DropdownMenu>
-								<DropdownMenuTrigger asChild>
-									<Button variant="ghost" className="flex items-center space-x-1">
-										<span className="hidden sm:inline-block">@defive...</span>
-										<ChevronDown className="h-4 w-4" />
+							{isAuthenticated ? (
+								<>
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button variant="ghost" className="flex items-center space-x-1">
+												<span className="hidden sm:inline-block">@defive...</span>
+												<ChevronDown className="h-4 w-4" />
+											</Button>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent align="end">
+											<DropdownMenuItem>
+												<User className="mr-2 h-4 w-4" />
+												<span>My Profile</span>
+											</DropdownMenuItem>
+											<DropdownMenuItem>
+												<Settings className="mr-2 h-4 w-4" />
+												<span>Settings</span>
+											</DropdownMenuItem>
+											<DropdownMenuSeparator />
+											<DropdownMenuItem>
+												<LogOut className="mr-2 h-4 w-4" />
+												<span>Sign Out</span>
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
+								</>
+							) : (
+								<div className="flex items-center space-x-4">
+									<Button variant="outline" onClick={() => { /* Sign In logic */ }}>
+										Sign In
 									</Button>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent align="end">
-									<DropdownMenuItem>
-										<User className="mr-2 h-4 w-4" />
-										<span>My Profile</span>
-									</DropdownMenuItem>
-									<DropdownMenuItem>
-										<Settings className="mr-2 h-4 w-4" />
-										<span>Settings</span>
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem>
-										<LogOut className="mr-2 h-4 w-4" />
-										<span>Sign Out</span>
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
-
+									<Button onClick={() => { /* Sign Up logic */ }}>
+										Sign Up
+									</Button>
+								</div>
+							)}
 							<ModeToggle />
 						</div>
 					</div>

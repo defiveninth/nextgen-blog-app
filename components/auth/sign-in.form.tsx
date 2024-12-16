@@ -8,27 +8,31 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
+import useSignIn from '@/actions/auth/useSignIn'
 
 export default function SignInForm() {
-	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
+	const [email, setEmail] = useState('abdurrauf.sakenov@narxoz.kz')
+	const [password, setPassword] = useState('defiveninth')
+	const { isLoading, error, signIn } = useSignIn()
 	const router = useRouter()
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		if (!email || !password) {
+
+		const success = await signIn(email, password)
+		if (success) {
 			toast({
-				title: "Error",
-				description: "Please fill in all fields.",
+				title: "Success!",
+				description: "You have signed in successfully.",
+			})
+			router.push('/')
+		} else {
+			toast({
+				title: "Sign-in Failed",
+				description: error || "Unable to sign in. Please try again.",
 				variant: "destructive",
 			})
-			return
 		}
-		console.log('Form submitted:', { email, password })
-		toast({
-			title: "Success!",
-			description: "Sign-in attempt recorded.",
-		})
 	}
 
 	return (
@@ -67,12 +71,15 @@ export default function SignInForm() {
 						</Link>
 					</div>
 				</CardContent>
-				<CardFooter className='flex flex-col gap-5'>
-					<Button type="submit" className="w-full">Sign In</Button>
-					<Button variant={'outline'} className="w-full" type='button' onClick={() => router.push('/auth/sign-up')}>Create account</Button>
+				<CardFooter className="flex flex-col gap-5">
+					<Button type="submit" className="w-full" disabled={isLoading}>
+						{isLoading ? 'Signing In...' : 'Sign In'}
+					</Button>
+					<Button variant="outline" className="w-full" type="button" onClick={() => router.push('/auth/sign-up')}>
+						Create account
+					</Button>
 				</CardFooter>
 			</form>
 		</Card>
 	)
 }
-

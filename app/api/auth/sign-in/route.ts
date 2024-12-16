@@ -38,13 +38,12 @@ export async function POST(request: Request) {
 		const response = NextResponse.json(
 			{ message: 'Sign-in successful!' },
 			{ status: 200 }
-		).cookies.set('token', token, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === 'production',
-			maxAge: 5 * 24 * 60 * 60,
-			sameSite: 'strict',
-			path: '/',
-		})
+		)
+		response.headers.set(
+			'Set-Cookie',
+			`authtoken=${token}; HttpOnly; Secure=${process.env.NODE_ENV === 'production'
+			}; Max-Age=${5 * 24 * 60 * 60}; SameSite=Strict; Path=/`
+		)
 
 		return response
 	} catch (error: any) {

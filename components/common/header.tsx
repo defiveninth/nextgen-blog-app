@@ -2,200 +2,202 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { Search, ChevronDown, Menu, LogOut, User, Settings, HomeIcon, Rss, ChartBarStacked } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
-
-const navigation = [
-	{ name: 'Home', href: '/' },
-	{
-		name: 'Categories',
-		href: '#',
-		children: [
-			{ name: 'Technology', href: '/category/technology' },
-			{ name: 'Travel', href: '/category/travel' },
-			{ name: 'Food', href: '/category/food' },
-		],
-	},
-	{ name: 'About', href: '/about' },
-	{ name: 'Contact', href: '/contact' },
-]
+import { Input } from '@/components/ui/input'
+import { ModeToggle } from '../theme/switch'
+import {
+	NavigationMenu,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+} from "@/components/ui/navigation-menu"
+import { Badge } from "@/components/ui/badge"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet"
 
 export function Header() {
-	const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-	const router = useRouter()
+	const [searchValue, setSearchValue] = useState('')
 
 	return (
-		<header className="bg-white shadow">
-			<nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Top">
-				<div className="flex w-full items-center justify-between border-b border-indigo-500 py-6 lg:border-none">
-					<div className="flex items-center">
-						<Link href="/">
-							<span className="sr-only">My NextJs Blog</span>
-							<img
-								className="h-5 w-auto"
-								src="/next.svg"
-								alt="Logo"
-							/>
+		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+			<div className="mx-auto max-w-[1080px] px-4">
+				<div className="flex h-14 items-center justify-between">
+					{/* Mobile Header */}
+					<div className="flex md:hidden items-center justify-between w-full">
+						<Link href="/" className="flex items-center space-x-2">
+							<div className="h-6 w-6 bg-blue-500 rounded-md" />
+							<span className="font-bold">NextGen</span>
 						</Link>
-						<div className="ml-10 hidden space-x-8 lg:flex">
-							{navigation.map((item) => (
-								<NavItem key={item.name} item={item} />
-							))}
+
+						<div className="flex items-center space-x-4">
+							<Sheet>
+								<SheetTrigger asChild>
+									<Button variant="ghost" size="icon" className="text-muted-foreground">
+										<Search className="h-5 w-5" />
+									</Button>
+								</SheetTrigger>
+								<SheetContent side="top" className="h-32">
+									<div className="h-full flex items-center justify-center px-4">
+										<div className="relative w-full max-w-md">
+											<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+											<input
+												className="w-full rounded-md border border-input bg-background px-10 py-2 text-sm"
+												placeholder="Search applications"
+											/>
+										</div>
+									</div>
+								</SheetContent>
+							</Sheet>
+
+							<Sheet>
+								<SheetTrigger asChild>
+									<Button variant="ghost" className="flex items-center space-x-1 px-2">
+										<span>@defive...</span>
+										<ChevronDown className="h-4 w-4" />
+									</Button>
+								</SheetTrigger>
+								<SheetContent side="bottom" className="h-auto">
+									<SheetHeader>
+										<SheetTitle className="text-left">NextGen</SheetTitle>
+									</SheetHeader>
+									<div className="mt-4 space-y-4 mb-5">
+										<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+											<HomeIcon className="mr-2 h-5 w-5" />
+											Home
+										</Button>
+										<Button
+											variant="ghost"
+											className="w-full justify-start"
+											onClick={() => { }}
+										>
+											<Rss className="mr-2 h-5 w-5" />
+											Popular
+										</Button>
+										<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+											<ChartBarStacked className="mr-2 h-5 w-5" />
+											Categories
+										</Button>
+									</div>
+									<SheetHeader>
+										<SheetTitle className="text-left">Profile actions</SheetTitle>
+									</SheetHeader>
+									<div className="mt-4 space-y-4">
+										<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+											<User className="mr-2 h-5 w-5" />
+											My Profile
+										</Button>
+										<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+											<Settings className="mr-2 h-5 w-5" />
+											Settings
+										</Button>
+										<Button
+											variant="ghost"
+											className="w-full justify-start text-red-500 hover:text-red-500 hover:bg-red-50"
+											onClick={() => { }}
+										>
+											<LogOut className="mr-2 h-5 w-5" />
+											Logout
+										</Button>
+									</div>
+								</SheetContent>
+							</Sheet>
+							<ModeToggle />
 						</div>
 					</div>
-					<div className="ml-10 space-x-4">
-						<Button variant="outline" className="hidden lg:inline-block" onClick={() => router.push('/auth/sign-in')}>
-							Sign in
-						</Button>
-						<Button className="hidden lg:inline-block" onClick={() => router.push('/auth/sign-up')}>Sign up</Button>
-					</div>
-					<div className="flex lg:hidden">
-						<Button
-							variant="ghost"
-							className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-							onClick={() => setMobileMenuOpen(true)}
-						>
-							<span className="sr-only">Open main menu</span>
-							<Menu className="h-6 w-6" aria-hidden="true" />
-						</Button>
+
+					{/* Desktop Header - hidden on mobile */}
+					<div className="hidden md:flex md:items-center md:justify-between md:w-full">
+						{/* Logo */}
+						<Link href="/" className="flex items-center space-x-2">
+							<div className="h-6 w-6 bg-blue-500 rounded-md" />
+							<span className="font-bold">NextGen</span>
+						</Link>
+
+						{/* Desktop Navigation */}
+						<NavigationMenu className="hidden md:flex">
+							<NavigationMenuList>
+								<NavigationMenuItem>
+									<Link href="/apps" legacyBehavior passHref>
+										<NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+											Home
+										</NavigationMenuLink>
+									</Link>
+								</NavigationMenuItem>
+								<NavigationMenuItem>
+									<Link href="/journal" legacyBehavior passHref>
+										<NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+											Popular
+										</NavigationMenuLink>
+									</Link>
+								</NavigationMenuItem>
+								<NavigationMenuItem>
+									<Link href="/ads" legacyBehavior passHref>
+										<NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
+											Categories
+										</NavigationMenuLink>
+									</Link>
+								</NavigationMenuItem>
+							</NavigationMenuList>
+						</NavigationMenu>
+
+						{/* Search - hidden on mobile */}
+						<div className="hidden md:block relative flex-1 max-w-md mx-4">
+							<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+							<Input
+								placeholder="Search applications"
+								value={searchValue}
+								onChange={(e) => setSearchValue(e.target.value)}
+								className="pl-8 pr-12"
+							/>
+							<kbd className="pointer-events-none absolute right-2 top-2.5 select-none rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
+								/
+							</kbd>
+						</div>
+
+						{/* Right Section */}
+						<div className="flex items-center space-x-4">
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button variant="ghost" className="flex items-center space-x-1">
+										<span className="hidden sm:inline-block">@defive...</span>
+										<ChevronDown className="h-4 w-4" />
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent align="end">
+									<DropdownMenuItem>
+										<User className="mr-2 h-4 w-4" />
+										<span>My Profile</span>
+									</DropdownMenuItem>
+									<DropdownMenuItem>
+										<Settings className="mr-2 h-4 w-4" />
+										<span>Settings</span>
+									</DropdownMenuItem>
+									<DropdownMenuSeparator />
+									<DropdownMenuItem>
+										<LogOut className="mr-2 h-4 w-4" />
+										<span>Sign Out</span>
+									</DropdownMenuItem>
+								</DropdownMenuContent>
+							</DropdownMenu>
+
+							<ModeToggle />
+						</div>
 					</div>
 				</div>
-			</nav>
-			{mobileMenuOpen && (
-				<MobileMenu onClose={() => setMobileMenuOpen(false)} />
-			)}
+			</div>
 		</header>
 	)
 }
-
-function NavItem({ item }: { item: typeof navigation[0] }) {
-	const [isOpen, setIsOpen] = useState(false)
-
-	if (item.children) {
-		return (
-			<div className="relative">
-				<button
-					className="text-base font-medium text-gray-500 hover:text-gray-900"
-					onClick={() => setIsOpen(!isOpen)}
-				>
-					{item.name}
-				</button>
-				{isOpen && (
-					<div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-						<div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-							{item.children.map((child) => (
-								<Link
-									key={child.name}
-									href={child.href}
-									className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-									role="menuitem"
-								>
-									{child.name}
-								</Link>
-							))}
-						</div>
-					</div>
-				)}
-			</div>
-		)
-	}
-
-	return (
-		<Link
-			href={item.href}
-			className="text-base font-medium text-gray-500 hover:text-gray-900"
-		>
-			{item.name}
-		</Link>
-	)
-}
-
-function MobileMenu({ onClose }: { onClose: () => void }) {
-	return (
-		<div className="lg:hidden" role="dialog" aria-modal="true">
-			<div className="fixed inset-0 z-10" />
-			<div className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-				<div className="flex items-center justify-between">
-					<Link href="/" className="-m-1.5 p-1.5">
-						<span className="sr-only">My NextJs Blog</span>
-						<img
-							className="h-4 w-auto"
-							src="/next.svg"
-							alt="Logo"
-						/>
-					</Link>
-					<Button variant="ghost" onClick={onClose}>
-						<span className="sr-only">Close menu</span>
-						<X className="h-6 w-6" aria-hidden="true" />
-					</Button>
-				</div>
-				<div className="mt-6 flow-root">
-					<div className="-my-6 divide-y divide-gray-500/10">
-						<div className="space-y-2 py-6">
-							{navigation.map((item) => (
-								<MobileNavItem key={item.name} item={item} />
-							))}
-						</div>
-						<div className="py-6">
-							<Button variant="outline" className="w-full mb-2">Sign in</Button>
-							<Button className="w-full">Sign up</Button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	)
-}
-
-function MobileNavItem({ item }: { item: typeof navigation[0] }) {
-	const [isOpen, setIsOpen] = useState(false)
-
-	if (item.children) {
-		return (
-			<div>
-				<button
-					className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-					onClick={() => setIsOpen(!isOpen)}
-				>
-					{item.name}
-					<svg
-						className={`h-5 w-5 flex-none ${isOpen ? 'rotate-180' : ''}`}
-						viewBox="0 0 20 20"
-						fill="currentColor"
-						aria-hidden="true"
-					>
-						<path
-							fillRule="evenodd"
-							d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-							clipRule="evenodd"
-						/>
-					</svg>
-				</button>
-				{isOpen && (
-					<div className="mt-2 space-y-2">
-						{item.children.map((child) => (
-							<Link
-								key={child.name}
-								href={child.href}
-								className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-							>
-								{child.name}
-							</Link>
-						))}
-					</div>
-				)}
-			</div>
-		)
-	}
-
-	return (
-		<Link
-			href={item.href}
-			className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-		>
-			{item.name}
-		</Link>
-	)
-}
-

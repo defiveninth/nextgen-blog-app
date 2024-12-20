@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 			`authtoken=${token}; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; Max-Age=${5 * 24 * 60 * 60}; SameSite=Strict; Path=/`
 		)
 
-		return NextResponse.redirect('/')
+		return response
 	} catch (error: any) {
 		console.error(error)
 		return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })

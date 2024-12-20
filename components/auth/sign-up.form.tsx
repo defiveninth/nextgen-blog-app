@@ -19,7 +19,7 @@ import useCreateAccount from '@/actions/auth/create-account'
 import { Loader } from 'lucide-react'
 
 export default function SignUpForm() {
-	const [email, setEmail] = useState('')
+	const [email, setEmail] = useState('misterfighter1990@gmail.com')
 	const [acceptTerms, setAcceptTerms] = useState(false)
 	const router = useRouter()
 	const { isLoading, createAccount } = useCreateAccount()

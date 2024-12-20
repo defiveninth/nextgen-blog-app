@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 		const { rows } = await pool.query(query, values)
 		const user = rows[0]
 
-		if (!user) {
+		if (!user.password) {
 			return NextResponse.json({ error: 'Invalid email or password.' }, { status: 401 })
 		}
 

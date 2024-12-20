@@ -1,8 +1,10 @@
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function useActivateAccount() {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
+	const router = useRouter()
 
 	const activateAccount = async (
 		verifyToken: string,
@@ -24,7 +26,7 @@ export default function useActivateAccount() {
 			if (!response.ok) {
 				throw new Error(data.error || 'Activation failed. Please try again.')
 			}
-
+			router.replace('/')
 			return true
 		} catch (err: any) {
 			setError(err.message || 'An unexpected error occurred.')

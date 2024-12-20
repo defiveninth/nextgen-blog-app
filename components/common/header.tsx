@@ -30,14 +30,13 @@ import { useRouter } from 'next/navigation'
 
 export function Header() {
 	const [searchValue, setSearchValue] = useState('')
-	const isAuthenticated = true
+	const isAuthenticated = false
 	const router = useRouter()
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<div className="mx-auto max-w-[1080px] px-4">
 				<div className="flex h-14 items-center justify-between">
-					{/* Mobile Header */}
 					<div className="flex md:hidden items-center justify-between w-full">
 						<Link href="/" className="flex items-center space-x-2">
 							<div className="h-6 w-6 bg-blue-500 rounded-md" />
@@ -57,7 +56,7 @@ export function Header() {
 											<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 											<input
 												className="w-full rounded-md border border-input bg-background px-10 py-2 text-sm"
-												placeholder="Search applications"
+												placeholder="What are you looking for?"
 											/>
 										</div>
 									</div>
@@ -109,7 +108,7 @@ export function Header() {
 											<Button
 												variant="ghost"
 												className="w-full justify-start text-red-500 hover:text-red-500 hover:bg-red-50"
-												onClick={() => { }}
+												onClick={() => router.push('/api/auth/sign-out')}
 											>
 												<LogOut className="mr-2 h-5 w-5" />
 												Logout
@@ -119,10 +118,10 @@ export function Header() {
 								</Sheet>
 							) : (
 								<div className="flex items-center space-x-4">
-									<Button variant="outline" onClick={() => { /* Sign In logic */ }}>
+									<Button variant="outline" onClick={() => router.push('/auth/sign-in')}>
 										Sign In
 									</Button>
-									<Button onClick={() => { /* Sign Up logic */ }}>
+									<Button onClick={() => router.push('/auth/sign-up')}>
 										Sign Up
 									</Button>
 								</div>
@@ -131,33 +130,30 @@ export function Header() {
 						</div>
 					</div>
 
-					{/* Desktop Header - hidden on mobile */}
 					<div className="hidden md:flex md:items-center md:justify-between md:w-full">
-						{/* Logo */}
 						<Link href="/" className="flex items-center space-x-2">
 							<div className="h-6 w-6 bg-blue-500 rounded-md" />
 							<span className="font-bold">NextGen</span>
 						</Link>
 
-						{/* Desktop Navigation */}
 						<NavigationMenu className="hidden md:flex">
 							<NavigationMenuList>
 								<NavigationMenuItem>
-									<Link href="/apps" legacyBehavior passHref>
+									<Link href="/" legacyBehavior passHref>
 										<NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
 											Home
 										</NavigationMenuLink>
 									</Link>
 								</NavigationMenuItem>
 								<NavigationMenuItem>
-									<Link href="/journal" legacyBehavior passHref>
+									<Link href="/popular" legacyBehavior passHref>
 										<NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
 											Popular
 										</NavigationMenuLink>
 									</Link>
 								</NavigationMenuItem>
 								<NavigationMenuItem>
-									<Link href="/ads" legacyBehavior passHref>
+									<Link href="/categories" legacyBehavior passHref>
 										<NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">
 											Categories
 										</NavigationMenuLink>
@@ -170,7 +166,7 @@ export function Header() {
 						<div className="hidden md:block relative flex-1 max-w-md mx-4">
 							<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
 							<Input
-								placeholder="Search applications"
+								placeholder="What are you looking for?"
 								value={searchValue}
 								onChange={(e) => setSearchValue(e.target.value)}
 								className="pl-8 pr-12"
@@ -210,10 +206,10 @@ export function Header() {
 								</>
 							) : (
 								<div className="flex items-center space-x-4">
-									<Button variant="outline" onClick={() => { }}>
+									<Button variant="outline" onClick={() => router.push('/auth/sign-in')}>
 										Sign In
 									</Button>
-									<Button onClick={() => { }}>
+									<Button onClick={() => router.push('/auth/sign-up')}>
 										Sign Up
 									</Button>
 								</div>

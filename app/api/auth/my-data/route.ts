@@ -21,7 +21,7 @@ export async function POST(_request: Request) {
             FROM users
             WHERE "authToken" = $1;
         `
-		const result = await pool.query(query, ['eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4YTgyZjIzLWQwOTUtNDUwYS1iOTliLTc1YTU0YTQ2NDI2YyIsImVtYWlsIjoibWlzdGVyZmlnaHRlcjE5OTBAZ21haWwuY29tIiwiaWF0IjoxNzM0NzExMjEwLCJleHAiOjE3MzUxNDMyMTB9.MxlJcvjS4QyZX9XlwjdL_6st9APNTgotaZ1BAs2rel8'])
+		const result = await pool.query(query, [token])
 
 		if (result.rows.length === 0) {
 			return new NextResponse(JSON.stringify({ error: 'User not found' }), {

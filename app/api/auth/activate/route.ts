@@ -23,16 +23,16 @@ export async function POST(request: Request) {
 
 		const hashedPassword = await bcrypt.hash(password, 10)
 
+		const token = generateAccessToken({ id: user.id, email: user.email })
+
 		await pool.query(
 			`
 		UPDATE "users"
-		SET name = $1, password = $2, "verifyToken" = NULL
+		SET name = $1, password = $2, "verifyToken" = NULL, "authToken" = $4
 		WHERE id = $3
 		`,
-			[name, hashedPassword, user.id]
+			[name, hashedPassword, user.id, token]
 		)
-
-		const token = generateAccessToken({ id: user.id, email: user.email })
 
 		const response = NextResponse.json(
 			{ message: 'Activate account successful!' },

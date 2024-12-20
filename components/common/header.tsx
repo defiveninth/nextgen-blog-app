@@ -30,7 +30,7 @@ import { useRouter } from 'next/navigation'
 
 export function Header() {
 	const [searchValue, setSearchValue] = useState('')
-	const isAuthenticated = false
+	const isAuthenticated = true
 	const router = useRouter()
 
 	return (

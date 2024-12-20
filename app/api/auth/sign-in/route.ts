@@ -19,21 +19,26 @@ export async function POST(request: Request) {
 			WHERE email = $1
 		`
 		const values = [email]
-
 		const { rows } = await pool.query(query, values)
 		const user = rows[0]
 
-		if (!user.password) {
+		if (!user || !user.password) {
 			return NextResponse.json({ error: 'Invalid email or password.' }, { status: 401 })
 		}
 
 		const passwordMatch = await bcrypt.compare(password, user.password)
-
 		if (!passwordMatch) {
 			return NextResponse.json({ error: 'Invalid email or password.' }, { status: 401 })
 		}
 
 		const token = generateAccessToken({ id: user.id, email: user.email })
+
+		const updateQuery = `
+			UPDATE users
+			SET "authToken" = $1
+			WHERE id = $2
+		`
+		await pool.query(updateQuery, [token, user.id])
 
 		const response = NextResponse.json(
 			{ message: 'Sign-in successful!' },
@@ -41,8 +46,7 @@ export async function POST(request: Request) {
 		)
 		response.headers.set(
 			'Set-Cookie',
-			`authtoken=${token}; HttpOnly; Secure=${process.env.NODE_ENV === 'production'
-			}; Max-Age=${5 * 24 * 60 * 60}; SameSite=Strict; Path=/`
+			`authtoken=${token}; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; Max-Age=${5 * 24 * 60 * 60}; SameSite=Strict; Path=/`
 		)
 
 		return response

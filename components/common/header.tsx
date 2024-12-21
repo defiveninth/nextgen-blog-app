@@ -28,22 +28,17 @@ import {
 } from "@/components/ui/sheet"
 import { useRouter } from 'next/navigation'
 import useAuth from '@/actions/auth/auth'
+import validateUsername from '@/lib/username-renderer'
 
 export function Header() {
 	const [searchValue, setSearchValue] = useState('')
 	const router = useRouter()
+	
 	const { data, fetchMyData, isLoading } = useAuth()
 
 	useEffect(() => {
 		fetchMyData()
 	}, [])
-
-	function truncateString(str: string, maxLength: number) {
-		if (str.length <= maxLength) return str
-		const visibleChars = Math.min(6, maxLength)
-		return str.slice(0, visibleChars) + '...'
-	}
-
 
 	if (isLoading) return null
 
@@ -81,7 +76,7 @@ export function Header() {
 								<Sheet>
 									<SheetTrigger asChild>
 										<Button variant="ghost" className="flex items-center space-x-1 px-2">
-											<span>@{truncateString(data.username ?? data.email.split('@')[0], 6)}</span>
+											<span>@{validateUsername(data.username ?? data.email.split('@')[0], 6)}</span>
 											<ChevronDown className="h-4 w-4" />
 										</Button>
 									</SheetTrigger>
@@ -195,7 +190,7 @@ export function Header() {
 									<DropdownMenu>
 										<DropdownMenuTrigger asChild>
 											<Button variant="ghost" className="flex items-center space-x-1">
-												<span className="hidden sm:inline-block">@{truncateString(data.username ?? data.email.split('@')[0], 6)}</span>
+												<span className="hidden sm:inline-block">@{validateUsername(data.username ?? data.email.split('@')[0], 6)}</span>
 												<ChevronDown className="h-4 w-4" />
 											</Button>
 										</DropdownMenuTrigger>

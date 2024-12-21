@@ -29,19 +29,17 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      <ThemeProvider
-        defaultTheme='system'
-        attribute={'class'}
-        enableSystem
-        disableTransitionOnChange
-      >
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider
+          defaultTheme='system'
+          attribute={'class'}
+          enableSystem
+          disableTransitionOnChange
         >
           {children}
           <Toaster />
-        </body>
-      </ThemeProvider>
-    </html>
+        </ThemeProvider>
+      </body>
+    </html >
   )
 }

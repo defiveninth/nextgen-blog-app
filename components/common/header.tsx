@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Search, ChevronDown, LogOut, User, Settings, HomeIcon, Rss, ChartBarStacked } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -27,11 +27,25 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet"
 import { useRouter } from 'next/navigation'
+import useAuth from '@/actions/auth/auth'
 
 export function Header() {
 	const [searchValue, setSearchValue] = useState('')
-	const isAuthenticated = true
 	const router = useRouter()
+	const { data, fetchMyData, isLoading } = useAuth()
+
+	useEffect(() => {
+		fetchMyData()
+	}, [])
+
+	function truncateString(str: string, maxLength: number) {
+		if (str.length <= maxLength) return str
+		const visibleChars = Math.min(6, maxLength)
+		return str.slice(0, visibleChars) + '...'
+	}
+
+
+	if (isLoading) return null
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -63,11 +77,11 @@ export function Header() {
 								</SheetContent>
 							</Sheet>
 
-							{isAuthenticated ? (
+							{data ? (
 								<Sheet>
 									<SheetTrigger asChild>
 										<Button variant="ghost" className="flex items-center space-x-1 px-2">
-											<span>@defive...</span>
+											<span>@{truncateString(data.username ?? data.email.split('@')[0], 6)}</span>
 											<ChevronDown className="h-4 w-4" />
 										</Button>
 									</SheetTrigger>
@@ -76,19 +90,19 @@ export function Header() {
 											<SheetTitle className="text-left">NextGen</SheetTitle>
 										</SheetHeader>
 										<div className="mt-4 space-y-4 mb-5">
-											<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+											<Button variant="ghost" className="w-full justify-start" onClick={() => router.push('/')}>
 												<HomeIcon className="mr-2 h-5 w-5" />
 												Home
 											</Button>
 											<Button
 												variant="ghost"
 												className="w-full justify-start"
-												onClick={() => { }}
+												onClick={() => router.push('/popular')}
 											>
 												<Rss className="mr-2 h-5 w-5" />
 												Popular
 											</Button>
-											<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+											<Button variant="ghost" className="w-full justify-start" onClick={() => router.push('/categories')}>
 												<ChartBarStacked className="mr-2 h-5 w-5" />
 												Categories
 											</Button>
@@ -97,11 +111,11 @@ export function Header() {
 											<SheetTitle className="text-left">Profile actions</SheetTitle>
 										</SheetHeader>
 										<div className="mt-4 space-y-4">
-											<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+											<Button variant="ghost" className="w-full justify-start" onClick={() => router.push('/profile')}>
 												<User className="mr-2 h-5 w-5" />
 												My Profile
 											</Button>
-											<Button variant="ghost" className="w-full justify-start" onClick={() => { }}>
+											<Button variant="ghost" className="w-full justify-start" onClick={() => router.push('/settings')}>
 												<Settings className="mr-2 h-5 w-5" />
 												Settings
 											</Button>
@@ -162,7 +176,6 @@ export function Header() {
 							</NavigationMenuList>
 						</NavigationMenu>
 
-						{/* Search - hidden on mobile */}
 						<div className="hidden md:block relative flex-1 max-w-md mx-4">
 							<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
 							<Input
@@ -176,23 +189,22 @@ export function Header() {
 							</kbd>
 						</div>
 
-						{/* Right Section */}
 						<div className="flex items-center space-x-4">
-							{isAuthenticated ? (
+							{data ? (
 								<>
 									<DropdownMenu>
 										<DropdownMenuTrigger asChild>
 											<Button variant="ghost" className="flex items-center space-x-1">
-												<span className="hidden sm:inline-block">@defive...</span>
+												<span className="hidden sm:inline-block">@{truncateString(data.username ?? data.email.split('@')[0], 6)}</span>
 												<ChevronDown className="h-4 w-4" />
 											</Button>
 										</DropdownMenuTrigger>
 										<DropdownMenuContent align="end">
-											<DropdownMenuItem>
+											<DropdownMenuItem onClick={() => router.push('/profile')}>
 												<User className="mr-2 h-4 w-4" />
 												<span>My Profile</span>
 											</DropdownMenuItem>
-											<DropdownMenuItem>
+											<DropdownMenuItem onClick={() => router.push('/settings')}>
 												<Settings className="mr-2 h-4 w-4" />
 												<span>Settings</span>
 											</DropdownMenuItem>

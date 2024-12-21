@@ -24,15 +24,26 @@ export async function POST(request: Request) {
 
 			await sendVerificationEmail(email, verifyToken)
 
-			return NextResponse.json({ message: 'User created successfully, Please check your email address to verify account' }, { status: 201 })
-		} catch (dbError: any) {
-			if (dbError.code === '23505') {
-				return NextResponse.json({ error: 'User with this email already exists.' }, { status: 400 })
+			return NextResponse.json(
+				{
+					message: 'User created successfully, Please check your email address to verify account',
+				},
+				{ status: 201 }
+			)
+		} catch (dbError) {
+			if ((dbError as { code?: string }).code === '23505') {
+				return NextResponse.json(
+					{ error: 'User with this email already exists.' },
+					{ status: 400 }
+				)
 			}
 			throw dbError
 		}
-	} catch (error: any) {
+	} catch (error) {
 		console.error(error)
-		return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })
+		return NextResponse.json(
+			{ error: 'Internal server error.' },
+			{ status: 500 }
+		)
 	}
 }

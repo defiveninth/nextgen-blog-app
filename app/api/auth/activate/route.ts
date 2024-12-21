@@ -1,7 +1,7 @@
 import pool from '@/lib/db'
-import bcrypt from 'bcrypt'
-import { NextResponse } from 'next/server'
 import { generateAccessToken } from '@/lib/jwt'
+import { hash } from 'bcrypt'
+import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
 	try {
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
 
 		const user = rows[0]
 
-		const hashedPassword = await bcrypt.hash(password, 10)
+		const hashedPassword = await hash(password, 10)
 
 		const token = generateAccessToken({ id: user.id, email: user.email })
 
@@ -44,8 +44,9 @@ export async function POST(request: Request) {
 		)
 
 		return response
-	} catch (error: any) {
-		console.error(error)
+	} catch (error: unknown) {
+		if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 500 })
+
 		return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })
 	}
 }

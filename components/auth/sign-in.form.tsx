@@ -8,12 +8,12 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
-import useSignIn from '@/actions/auth/sign-in'
 import { Loader } from 'lucide-react'
+import useSignIn from '@/actions/auth/sign-in'
 
 export default function SignInForm() {
-	const [email, setEmail] = useState('abdurrauf.sakenov@narxoz.kz')
-	const [password, setPassword] = useState('defiveninth')
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('123456789')
 	const { isLoading, error, signIn } = useSignIn()
 	const router = useRouter()
 

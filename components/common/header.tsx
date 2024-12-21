@@ -33,12 +33,12 @@ import validateUsername from '@/lib/username-renderer'
 export function Header() {
 	const [searchValue, setSearchValue] = useState('')
 	const router = useRouter()
-	
+
 	const { data, fetchMyData, isLoading } = useAuth()
 
 	useEffect(() => {
 		fetchMyData()
-	}, [])
+	}, [fetchMyData])
 
 	if (isLoading) return null
 

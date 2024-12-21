@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers'
 
-export async function GET(_request: Request) {
+export async function GET() {
 	const cookieStore = await cookies()
 
 	cookieStore.delete('authtoken')

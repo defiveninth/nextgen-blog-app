@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 
 interface comingUserDataType {
 	id: string
@@ -13,7 +13,7 @@ export default function useAuth() {
 	const [error, setError] = useState<string>('')
 	const [data, setData] = useState<comingUserDataType | null>(null)
 
-	const fetchMyData = async () => {
+	const fetchMyData = useCallback(async () => {
 		setIsLoading(true)
 		setError('')
 
@@ -35,7 +35,7 @@ export default function useAuth() {
 		} finally {
 			setIsLoading(false)
 		}
-	}
+	}, [])
 
 	return {
 		isLoading,

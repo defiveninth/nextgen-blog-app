@@ -6,6 +6,7 @@ import { generateAccessToken } from '@/lib/jwt'
 export async function POST(request: Request) {
 	try {
 		const { email, password } = await request.json()
+
 		if (!email) {
 			return NextResponse.json({ error: 'Email is required.' }, { status: 400 })
 		}
@@ -50,8 +51,13 @@ export async function POST(request: Request) {
 		)
 
 		return response
-	} catch (error: any) {
+	} catch (error: unknown) {
 		console.error(error)
+
+		if (error instanceof Error) {
+			return NextResponse.json({ error: error.message }, { status: 500 })
+		}
+
 		return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })
 	}
 }

@@ -24,6 +24,7 @@ export async function POST() {
 		const result = await pool.query(query, [token])
 
 		if (result.rows.length === 0) {
+			cookieStore.delete('authtoken')
 			return new NextResponse(JSON.stringify({ error: 'User not found' }), {
 				status: 404,
 				headers: {

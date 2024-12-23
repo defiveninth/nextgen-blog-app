@@ -17,6 +17,7 @@ export const verifyAccessToken = (token: string, secret: string): JwtPayload => 
 		if (typeof decoded === 'string') throw new Error('Invalid token format.')
 
 		return decoded as JwtPayload
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	} catch (error) {
 		throw new Error('Invalid or expired token.')
 	}

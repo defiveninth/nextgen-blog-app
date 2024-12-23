@@ -1,7 +1,6 @@
 import pool from '@/lib/db'
-import bcrypt from 'bcrypt'
 import { NextResponse } from 'next/server'
-import { generateAccessToken, verifyAccessToken } from '@/lib/jwt' // Assuming verifyAccessToken is implemented
+import { verifyAccessToken } from '@/lib/jwt'
 import { cookies } from 'next/headers'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'SATOSHI_NAKAMOTO'

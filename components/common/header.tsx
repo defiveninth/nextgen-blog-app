@@ -29,6 +29,7 @@ import {
 import { useRouter } from 'next/navigation'
 import useAuth from '@/actions/auth/auth'
 import validateUsername from '@/lib/username-renderer'
+import Image from 'next/image'
 
 export function Header() {
 	const [searchValue, setSearchValue] = useState('')
@@ -48,7 +49,9 @@ export function Header() {
 				<div className="flex h-14 items-center justify-between">
 					<div className="flex md:hidden items-center justify-between w-full">
 						<Link href="/" className="flex items-center space-x-2">
-							<div className="h-6 w-6 bg-blue-500 rounded-md" />
+							<div className="h-6 w-6 rounded-md">
+								<Image alt='' src={'/vercel.svg'} width={25} height={25} />
+							</div>
 							<span className="font-bold">NextGen</span>
 						</Link>
 

@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'SATOSHI_NAKAMOTO'
 
@@ -8,4 +8,16 @@ export function generateAccessToken(user: { id: string; email: string }): string
 		JWT_SECRET,
 		{ expiresIn: '5d' }
 	)
+}
+
+export const verifyAccessToken = (token: string, secret: string): JwtPayload => {
+	try {
+		const decoded = jwt.verify(token, secret)
+
+		if (typeof decoded === 'string') throw new Error('Invalid token format.')
+
+		return decoded as JwtPayload
+	} catch (error) {
+		throw new Error('Invalid or expired token.')
+	}
 }

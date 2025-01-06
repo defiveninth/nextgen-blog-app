@@ -26,7 +26,7 @@ export default function CreatePostForm() {
 			onSubmit={handleSubmit}
 			className="mt-5 space-y-4 max-w-2xl mx-auto p-6 bg-background border rounded-lg"
 		>
-			<h1 className="text-2xl font-bold mb-6">Create New Post</h1>
+			<h1 className="text-2xl font-bold mb-4">Create New Post</h1>
 
 			<div>
 				<Label htmlFor="title">Title</Label>
@@ -35,6 +35,7 @@ export default function CreatePostForm() {
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
 					required
+					placeholder='Write a headline that grabs attention...'
 				/>
 			</div>
 
@@ -45,6 +46,7 @@ export default function CreatePostForm() {
 					value={content}
 					onChange={(e) => setContent(e.target.value)}
 					required
+					placeholder='Let your words flow—start your masterpiece here...'
 				/>
 			</div>
 

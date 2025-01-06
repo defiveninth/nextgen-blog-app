@@ -87,3 +87,21 @@ VALUES
   ('Climate Change'),
   ('Agriculture'),
   ('Nutrition');
+
+DROP TABLE IF EXISTS post_categories;
+
+CREATE TABLE post_categories (
+    post_id TEXT NOT NULL,
+    category_id TEXT NOT NULL,
+    PRIMARY KEY (post_id, category_id),
+    CONSTRAINT post_categories_post_id_fkey FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+    CONSTRAINT post_categories_category_id_fkey FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE
+);
+
+CREATE TABLE post_tags (
+    post_id TEXT NOT NULL,
+    tag_id TEXT NOT NULL,
+    PRIMARY KEY (post_id, tag_id),
+    CONSTRAINT fk_post FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
+    CONSTRAINT fk_tag FOREIGN KEY (tag_id) REFERENCES tags (id) ON DELETE CASCADE
+);

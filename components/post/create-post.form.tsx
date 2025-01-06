@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import useCategories from '@/actions/categories/get-all'
+import useCreatePost from '@/actions/post/create'
 
 export default function CreatePostForm() {
 	const [title, setTitle] = useState('')
@@ -14,11 +15,17 @@ export default function CreatePostForm() {
 	const [published, setPublished] = useState(false)
 	const [category, setCategory] = useState('')
 
-	const { categories, isLoading, error } = useCategories()
+	const { categories, isLoading: loadingCategories, error: categoriesError } = useCategories()
+	const { isLoading: creatingPost, error: postError, createPost } = useCreatePost()
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		console.log({ title, content, published, category })
+
+		await createPost({ title, content, published, category })
+		setTitle('')
+		setContent('')
+		setPublished(false)
+		setCategory('')
 	}
 
 	return (
@@ -28,6 +35,8 @@ export default function CreatePostForm() {
 		>
 			<h1 className="text-2xl font-bold mb-4">Create New Post</h1>
 
+			{postError && <p className="text-red-500">{postError}</p>}
+
 			<div>
 				<Label htmlFor="title">Title</Label>
 				<Input
@@ -35,7 +44,7 @@ export default function CreatePostForm() {
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
 					required
-					placeholder='Write a headline that grabs attention...'
+					placeholder="Write a headline that grabs attention..."
 				/>
 			</div>
 
@@ -46,7 +55,7 @@ export default function CreatePostForm() {
 					value={content}
 					onChange={(e) => setContent(e.target.value)}
 					required
-					placeholder='Let your words flow—start your masterpiece here...'
+					placeholder="Let your words flow—start your masterpiece here..."
 				/>
 			</div>
 
@@ -61,10 +70,10 @@ export default function CreatePostForm() {
 
 			<div>
 				<Label htmlFor="category">Category</Label>
-				{isLoading ? (
+				{loadingCategories ? (
 					<p>Loading categories...</p>
-				) : error ? (
-					<p className="text-red-500">{error}</p>
+				) : categoriesError ? (
+					<p className="text-red-500">{categoriesError}</p>
 				) : (
 					<select
 						id="category"
@@ -82,8 +91,8 @@ export default function CreatePostForm() {
 				)}
 			</div>
 
-			<Button type="submit" className="w-full">
-				Create Post
+			<Button type="submit" className="w-full" disabled={creatingPost}>
+				{creatingPost ? 'Creating Post...' : 'Create Post'}
 			</Button>
 		</form>
 	)

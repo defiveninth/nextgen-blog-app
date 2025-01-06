@@ -1,40 +1,52 @@
 import { useState } from 'react'
 
-const useCreatePost = () => {
-	const [isLoading, setLoading] = useState<boolean>(false)
-	const [error, setError] = useState<string>('')
-	const [response, setResponse] = useState<Record<string, any> | null>(null)
-
-	const createPost = async (
-		title: string,
-		content: string,
-		published: boolean
-	) => {
-		setError('')
-		setLoading(true)
-		setResponse(null)
-
-		try {
-			const res = await fetch('/api/posts', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ title, content, published }),
-			})
-
-			const data = await res.json()
-
-			if (!res.ok) {
-				throw new Error(data.error || 'Failed to create post.')
-			}
-
-			setResponse(data)
-		} catch (err: any) {
-			setError(err.message || 'An unexpected error occurred.')
-		} finally {
-			setLoading(false)
-		}
-	}
-	return { isLoading, error, response, createPost } as const
+type PostData = {
+	title: string
+	content: string
+	published: boolean
+	category: string
 }
 
-export default useCreatePost
+type UseCreatePostReturn = {
+	isLoading: boolean
+	error: string | null
+	createPost: (postData: PostData) => Promise<void>
+}
+
+export default function useCreatePost(): UseCreatePostReturn {
+	const [isLoading, setIsLoading] = useState(false)
+	const [error, setError] = useState<string | null>(null)
+
+	const createPost = async (postData: PostData) => {
+		setIsLoading(true)
+		setError(null)
+
+		try {
+			const response = await fetch('/api/posts/create', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(postData),
+			})
+
+			if (!response.ok) {
+				const errorData = await response.json()
+				throw new Error(errorData.error || 'Failed to create post.')
+			}
+
+			const data = await response.json()
+			console.log('Post created successfully:', data)
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				setError(err.message)
+			} else {
+				setError('An unknown error occurred.')
+			}
+		} finally {
+			setIsLoading(false)
+		}
+	}
+
+	return { isLoading, error, createPost }
+}

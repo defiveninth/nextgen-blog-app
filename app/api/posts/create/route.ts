@@ -36,6 +36,7 @@ export async function POST(request: Request) {
 		try {
 			await client.query('BEGIN')
 
+			// Insert the post and get its ID
 			const insertPostQuery = `
 				INSERT INTO posts (title, content, published, "authorId")
 				VALUES ($1, $2, $3, $4)
@@ -44,6 +45,7 @@ export async function POST(request: Request) {
 			const postResult = await client.query(insertPostQuery, [title, content, published, authorId])
 			const postId = postResult.rows[0].id
 
+			// Ensure category exists and get its ID
 			const findCategoryQuery = 'SELECT id FROM categories WHERE name = $1'
 			const categoryResult = await client.query(findCategoryQuery, [category])
 
@@ -60,16 +62,17 @@ export async function POST(request: Request) {
 				categoryId = categoryResult.rows[0].id
 			}
 
-			const associateTagQuery = `
-				INSERT INTO post_tags (post_id, tag_id)
-				VALUES ($1, $2)
-				ON CONFLICT DO NOTHING;
+			// Update the post with its category
+			const updatePostCategoryQuery = `
+				UPDATE posts
+				SET category_id = $1
+				WHERE id = $2;
 			`
-			await client.query(associateTagQuery, [postId, tagId])
+			await client.query(updatePostCategoryQuery, [categoryId, postId])
 
+			// Extract unique tags from title and content
 			const tagPattern = /#(\w+)/g
 			const tags = new Set<string>()
-
 			for (const match of title.matchAll(tagPattern)) {
 				tags.add(match[1].toLowerCase())
 			}
@@ -77,36 +80,35 @@ export async function POST(request: Request) {
 				tags.add(match[1].toLowerCase())
 			}
 
-			if (tags.size > 0) {
-				for (const tagName of tags) {
-					const findTagQuery = 'SELECT id FROM tags WHERE name = $1'
-					const tagResult = await client.query(findTagQuery, [tagName])
+			// Process tags
+			for (const tagName of tags) {
+				// Ensure the tag exists and get its ID
+				const findTagQuery = 'SELECT id FROM tags WHERE name = $1'
+				const tagResult = await client.query(findTagQuery, [tagName])
 
-					let tagId
-
-					if (tagResult.rowCount === 0) {
-						const insertTagQuery = `
-							INSERT INTO tags (name)
-							VALUES ($1)
-							RETURNING id;
-						`
-						const newTagResult = await client.query(insertTagQuery, [tagName])
-						tagId = newTagResult.rows[0].id
-					} else {
-						tagId = tagResult.rows[0].id
-					}
-
-					const insertPostTagQuery = `
-						INSERT INTO post_tags ("postId", "tagId")
-						VALUES ($1, $2)
-						ON CONFLICT DO NOTHING;
+				let tagId
+				if (tagResult.rowCount === 0) {
+					const insertTagQuery = `
+						INSERT INTO tags (name)
+						VALUES ($1)
+						RETURNING id;
 					`
-					await client.query(insertPostTagQuery, [postId, tagId])
+					const newTagResult = await client.query(insertTagQuery, [tagName])
+					tagId = newTagResult.rows[0].id
+				} else {
+					tagId = tagResult.rows[0].id
 				}
+
+				// Associate tag with the post
+				const insertPostTagQuery = `
+					INSERT INTO post_tags (post_id, tag_id)
+					VALUES ($1, $2)
+					ON CONFLICT DO NOTHING;
+				`
+				await client.query(insertPostTagQuery, [postId, tagId])
 			}
 
 			await client.query('COMMIT')
-
 			return NextResponse.json({ message: 'Post created successfully.', postId }, { status: 201 })
 		} catch (error) {
 			await client.query('ROLLBACK')
@@ -116,12 +118,8 @@ export async function POST(request: Request) {
 			client.release()
 		}
 	} catch (error: unknown) {
-		console.error(error)
-
-		if (error instanceof Error) {
-			return NextResponse.json({ error: error.message }, { status: 500 })
-		}
-
-		return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })
+		console.error('Error processing POST request:', error)
+		const message = error instanceof Error ? error.message : 'Internal server error'
+		return NextResponse.json({ error: message }, { status: 500 })
 	}
 }

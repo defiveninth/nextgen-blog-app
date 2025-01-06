@@ -105,3 +105,12 @@ CREATE TABLE post_tags (
     CONSTRAINT fk_post FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE CASCADE,
     CONSTRAINT fk_tag FOREIGN KEY (tag_id) REFERENCES tags (id) ON DELETE CASCADE
 );
+
+ALTER TABLE posts ADD COLUMN category_id TEXT;
+
+ALTER TABLE posts
+ADD CONSTRAINT fk_category
+FOREIGN KEY (category_id) REFERENCES categories (id)
+ON DELETE SET NULL;
+
+

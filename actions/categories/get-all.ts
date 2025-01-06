@@ -15,12 +15,14 @@ const useCategories = () => {
 			setIsLoading(true)
 			setError(null)
 			try {
-				const response = await fetch('/api/categories/get-all')
+				const response = await fetch('/api/categories/get-all', {
+					cache: 'force-cache'
+				})
 				if (!response.ok) {
 					throw new Error(`Error fetching categories: ${response.statusText}`)
 				}
-				const categories: Array<CategoryType> = await response.json()
-				setData(categories)
+				const data: { categories: Array<CategoryType> } = await response.json()
+				setData(data.categories)
 			} catch (err: any) {
 				setError(err.message || 'An error occurred')
 			} finally {

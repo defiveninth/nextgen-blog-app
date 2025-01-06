@@ -1,11 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
+import useCategories from '@/actions/categories/get-all'
 
 export default function CreatePostForm() {
 	const [title, setTitle] = useState('')
@@ -13,17 +14,7 @@ export default function CreatePostForm() {
 	const [published, setPublished] = useState(false)
 	const [category, setCategory] = useState('')
 
-	const categories = [
-		"Technology", "Science", "Health", "Business", "Finances", "Sports", "Entertainment",
-		"Politics", "Education", "Environment", "Travel", "Food", "Fashion", "Art", "Music",
-		"Literature", "History", "Philosophy", "Psychology", "Sociology", "Economics", "Law",
-		"Medicine", "Engineering", "Architecture", "Design", "Marketing", "Advertising",
-		"Public Relations", "Human Resources", "Management", "Entrepreneurship", "Investing",
-		"Real Estate", "Cryptocurrency", "Artificial Intelligence", "Machine Learning",
-		"Data Science", "Cybersecurity", "Cloud Computing", "Internet of Things", "Robotics",
-		"Biotechnology", "Nanotechnology", "Space Exploration", "Renewable Energy",
-		"Sustainability", "Climate Change", "Agriculture", "Nutrition"
-	]
+	const { categories, isLoading, error } = useCategories()
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
@@ -31,8 +22,12 @@ export default function CreatePostForm() {
 	}
 
 	return (
-		<form onSubmit={handleSubmit} className="mt-5 space-y-4 max-w-2xl mx-auto p-6 bg-background border rounded-lg">
+		<form
+			onSubmit={handleSubmit}
+			className="mt-5 space-y-4 max-w-2xl mx-auto p-6 bg-background border rounded-lg"
+		>
 			<h1 className="text-2xl font-bold mb-6">Create New Post</h1>
+
 			<div>
 				<Label htmlFor="title">Title</Label>
 				<Input
@@ -64,23 +59,30 @@ export default function CreatePostForm() {
 
 			<div>
 				<Label htmlFor="category">Category</Label>
-				<select
-					id="category"
-					value={category}
-					onChange={(e) => setCategory(e.target.value)}
-					className="w-full p-2 mt-1 bg-background border border-input rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
-				>
-					<option value="">Select category...</option>
-					{categories.map((cat) => (
-						<option key={cat} value={cat}>
-							{cat}
-						</option>
-					))}
-				</select>
+				{isLoading ? (
+					<p>Loading categories...</p>
+				) : error ? (
+					<p className="text-red-500">{error}</p>
+				) : (
+					<select
+						id="category"
+						value={category}
+						onChange={(e) => setCategory(e.target.value)}
+						className="w-full p-2 mt-1 bg-background border border-input rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
+					>
+						<option value="">Select category...</option>
+						{categories.map((cat) => (
+							<option key={cat.id} value={cat.name}>
+								{cat.name}
+							</option>
+						))}
+					</select>
+				)}
 			</div>
 
-			<Button type="submit" className="w-full">Create Post</Button>
+			<Button type="submit" className="w-full">
+				Create Post
+			</Button>
 		</form>
 	)
 }
-

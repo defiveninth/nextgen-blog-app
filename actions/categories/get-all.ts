@@ -15,7 +15,7 @@ const useCategories = () => {
 			setIsLoading(true)
 			setError(null)
 			try {
-				const response = await fetch('/api/categories')
+				const response = await fetch('/api/categories/get-all')
 				if (!response.ok) {
 					throw new Error(`Error fetching categories: ${response.statusText}`)
 				}

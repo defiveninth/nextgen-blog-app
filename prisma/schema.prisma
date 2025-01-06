@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(uuid())
+  id          String    @id @default(dbgenerated("gen_random_uuid()"))
   name        String?
   username    String?   @unique
   email       String    @unique
@@ -16,45 +16,46 @@ model User {
   verifyToken String?
   authToken   String?
   avatar      String?
-  posts       Post[]
-  comments    Comment[]
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  updatedAt   DateTime  @default(now()) @updatedAt
+  comments    Comment[]
+  posts       Post[]
 
   @@map("users")
 }
 
 model Post {
-  id         String     @id @default(uuid())
+  id         String     @id @default(dbgenerated("gen_random_uuid()"))
   title      String
   content    String
   published  Boolean    @default(false)
-  author     User       @relation(fields: [authorId], references: [id])
   authorId   String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now()) @updatedAt
+  viewCount  Int        @default(0)
   comments   Comment[]
+  author     User       @relation(fields: [authorId], references: [id])
   categories Category[] @relation("PostCategories")
   tags       Tag[]      @relation("PostTags")
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
 
   @@map("posts")
 }
 
 model Comment {
-  id        String   @id @default(uuid())
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
   content   String
-  author    User     @relation(fields: [authorId], references: [id])
   authorId  String
-  post      Post     @relation(fields: [postId], references: [id])
   postId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
 
   @@map("comments")
 }
 
 model Category {
-  id    String @id @default(uuid())
+  id    String @id @default(dbgenerated("gen_random_uuid()"))
   name  String @unique
   posts Post[] @relation("PostCategories")
 
@@ -62,7 +63,7 @@ model Category {
 }
 
 model Tag {
-  id    String @id @default(uuid())
+  id    String @id @default(dbgenerated("gen_random_uuid()"))
   name  String @unique
   posts Post[] @relation("PostTags")
 

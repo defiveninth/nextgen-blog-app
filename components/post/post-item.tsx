@@ -42,7 +42,7 @@ export function PostItem({ post }: PostItemProps) {
 					<div className="flex flex-wrap gap-2">
 						{post.tags.map((tag) => (
 							<Badge key={tag.name} variant="secondary">
-								{tag.name}
+								#{tag.name}
 							</Badge>
 						))}
 					</div>

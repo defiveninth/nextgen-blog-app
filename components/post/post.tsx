@@ -88,7 +88,7 @@ export default function PostPage() {
 					<div className="flex flex-wrap gap-2">
 						{post.tags.map((tag) => (
 							<Badge key={tag.name} variant="secondary" className="">
-								{tag.name.replace(/([A-Z])/g, ' $1').trim()}
+								#{tag.name.replace(/([A-Z])/g, ' $1').trim()}
 							</Badge>
 						))}
 					</div>

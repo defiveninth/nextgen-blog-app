@@ -1,10 +1,10 @@
 'use client'
 
-import { usePosts } from '@/actions/post/posts'
-import { PostItem } from './post-item'
-import { Skeleton } from "@/components/ui/skeleton"
+import { usePosts } from '@/actions/posts/posts'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Skeleton } from "@/components/ui/skeleton"
 import { AlertCircle } from 'lucide-react'
+import { PostItem } from './post-item'
 
 function PostSkeleton() {
 	return (

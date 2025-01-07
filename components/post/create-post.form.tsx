@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import useCategories from '@/actions/categories/get-all'
+import useCreatePost from '@/actions/posts/create'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
-import useCategories from '@/actions/categories/get-all'
-import useCreatePost from '@/actions/post/create'
+import { Switch } from '@/components/ui/switch'
+import { Textarea } from '@/components/ui/textarea'
+import { useState } from 'react'
 
 export default function CreatePostForm() {
 	const [title, setTitle] = useState('')

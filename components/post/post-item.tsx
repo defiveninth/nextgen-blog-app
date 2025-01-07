@@ -1,8 +1,8 @@
-import Link from 'next/link'
-import { Post } from '@/actions/post/posts.types'
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
+import { Post } from '@/actions/posts/posts.types'
 import { Badge } from "@/components/ui/badge"
-import { CalendarIcon, UserIcon, EyeIcon } from 'lucide-react'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { CalendarIcon, EyeIcon, UserIcon } from 'lucide-react'
+import Link from 'next/link'
 
 interface PostItemProps {
 	post: Post

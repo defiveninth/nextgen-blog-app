@@ -7,6 +7,15 @@ interface PostItemProps {
 	post: Post
 }
 
+function formatDate(dateString: string): string {
+	const date = new Date(dateString)
+	return date.toLocaleDateString('en-GB', {
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric'
+	}).split('/').join('.')
+}
+
 export function PostItem({ post }: PostItemProps) {
 	return (
 		<Card>
@@ -22,7 +31,7 @@ export function PostItem({ post }: PostItemProps) {
 					</div>
 					<div className="flex items-center">
 						<CalendarIcon className="mr-1 h-3 w-3" />
-						<span>{new Date(post.createdAt).toLocaleDateString()}</span>
+						<span>{formatDate(post.createdAt)}</span>
 					</div>
 				</div>
 			</CardContent>
@@ -41,3 +50,4 @@ export function PostItem({ post }: PostItemProps) {
 		</Card>
 	)
 }
+

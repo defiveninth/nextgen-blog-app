@@ -31,7 +31,7 @@ export default function CreatePostForm() {
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="mt-5 space-y-4 max-w-2xl mx-auto p-6 bg-background border rounded-lg"
+			className="mt-5 space-y-4 max-w-2xl mx-auto p-6 bg-background border rounded-lg mb-10"
 		>
 			<h1 className="text-2xl font-bold mb-4">Create New Post</h1>
 

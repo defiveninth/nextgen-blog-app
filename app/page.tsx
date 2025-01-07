@@ -1,6 +1,7 @@
 import { Header } from '@/components/common/header'
 import CurrencyTicker from '@/components/currency'
 import CreatePostForm from '@/components/post/create-post.form'
+import { PostList } from '@/components/post/posts-list'
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <div className="container mx-auto max-w-[1080px]">
         <CurrencyTicker />
         <CreatePostForm />
+        <PostList />
       </div>
     </>
   )

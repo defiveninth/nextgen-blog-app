@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 
 	try {
 		if (!token) {
-			return NextResponse.json({ error: 'Authentication token is missing.' }, { status: 401 })
+			return NextResponse.json({ error: 'We are unable to allow post creation until your identity is verified. Kindly sign in or sign up to proceed.' }, { status: 401 })
 		}
 
 		const decodedToken = verifyAccessToken(token, JWT_SECRET)

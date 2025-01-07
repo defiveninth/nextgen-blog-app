@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CalendarIcon, UserIcon, EyeIcon } from 'lucide-react'
+import { parseContent } from '@/lib/parse-content'
 
 function formatDate(dateString: string): string {
 	const date = new Date(dateString)
@@ -17,7 +18,7 @@ function formatDate(dateString: string): string {
 	}).split('/').join('.')
 }
 
-export default function Post() {
+export default function PostPage() {
 	const { id } = useParams()
 	const { post, loading, error } = usePost(id as string)
 
@@ -57,11 +58,14 @@ export default function Post() {
 		)
 	}
 
+	const parsedTitle = parseContent(post.title)
+	const parsedContent = parseContent(post.content)
+
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<Card>
 				<CardHeader>
-					<CardTitle className="text-3xl">{post.title}</CardTitle>
+					<CardTitle className="text-3xl">{parsedTitle}</CardTitle>
 					<div className="flex items-center space-x-4 text-sm text-muted-foreground">
 						<div className="flex items-center">
 							<UserIcon className="mr-1 h-3 w-3" />
@@ -78,19 +82,19 @@ export default function Post() {
 					</div>
 				</CardHeader>
 				<CardContent>
-					<div className="prose max-w-none">{post.content}</div>
+					<div className="prose max-w-none">{parsedContent}</div>
 				</CardContent>
 				<CardFooter className="flex flex-col items-start gap-2">
 					<div className="flex flex-wrap gap-2">
 						{post.tags.map((tag) => (
-							<Badge key={tag.name} variant="secondary">
-								{tag.name}
+							<Badge key={tag.name} variant="secondary" className="">
+								{tag.name.replace(/([A-Z])/g, ' $1').trim()}
 							</Badge>
 						))}
 					</div>
 					{post.category && (
 						<Badge variant="outline" className="mt-2">
-							{post.category.name}
+							{post.category.name.replace(/([A-Z])/g, ' $1').trim()}
 						</Badge>
 					)}
 				</CardFooter>

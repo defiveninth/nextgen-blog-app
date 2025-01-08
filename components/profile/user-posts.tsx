@@ -38,7 +38,7 @@ export default function UserPosts() {
 					<AlertCircle className="h-4 w-4" />
 					<AlertTitle>Error</AlertTitle>
 					<AlertDescription>
-						There was an error loading the user's posts. Please try again later.
+						There was an error loading the user&apos;s posts. Please try again later.
 					</AlertDescription>
 				</Alert>
 			</div>

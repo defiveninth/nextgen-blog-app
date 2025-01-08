@@ -5,8 +5,14 @@ import { verifyAccessToken } from '@/lib/jwt'
 
 const secret = process.env.JWT_SECRET || 'default_secret'
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const { id: userId } = params
+type Params = Promise<{ id: string }>
+
+export async function GET(
+  request: Request,
+  segmentData: { params: Params }
+) {
+  const params = await segmentData.params
+  const userId = params.id
 
   if (!userId) {
     return NextResponse.json({ error: 'User ID is required' }, { status: 400 })

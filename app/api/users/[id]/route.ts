@@ -5,45 +5,45 @@ import { verifyAccessToken } from '@/lib/jwt'
 
 const secret = process.env.JWT_SECRET || 'default_secret'
 
-export async function GET({ params }: { params: { id: string } }) {
-	const { id: userId } = params
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const { id: userId } = params
 
-	if (!userId) {
-		return NextResponse.json({ error: 'User ID is required' }, { status: 400 })
-	}
+  if (!userId) {
+    return NextResponse.json({ error: 'User ID is required' }, { status: 400 })
+  }
 
-	const cookieStore = await cookies()
-	const authToken = cookieStore.get('authtoken')?.value
+  const cookieStore = await cookies()
+  const authToken = cookieStore.get('authtoken')?.value
 
-	let isThisMe = false
+  let isThisMe = false
 
-	if (authToken) {
-		try {
-			const decoded = verifyAccessToken(authToken, secret)
-			isThisMe = decoded.id === userId
-		} catch (error) {
-			console.error('Error verifying auth token:', error)
-		}
-	}
+  if (authToken) {
+    try {
+      const decoded = verifyAccessToken(authToken, secret)
+      isThisMe = decoded.id === userId
+    } catch (error) {
+      console.error('Error verifying auth token:', error)
+    }
+  }
 
-	const query = `
+  const query = `
     SELECT id, name, username, email, avatar, "createdAt", "updatedAt"
     FROM users
     WHERE id = $1
   `
 
-	try {
-		const client = await pool.connect()
-		const result = await client.query(query, [userId])
+  try {
+    const client = await pool.connect()
+    const result = await client.query(query, [userId])
 
-		if (result.rowCount === 0) {
-			return NextResponse.json({ error: 'User not found' }, { status: 404 })
-		}
+    if (result.rowCount === 0) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
 
-		const user = result.rows[0]
-		return NextResponse.json({ ...user, isThisMe }, { status: 200 })
-	} catch (error) {
-		console.error('Error fetching user profile:', error)
-		return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
-	}
+    const user = result.rows[0]
+    return NextResponse.json({ ...user, isThisMe }, { status: 200 })
+  } catch (error) {
+    console.error('Error fetching user profile:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }

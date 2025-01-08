@@ -12,7 +12,7 @@ export async function GET(
   segmentData: { params: Params }
 ) {
   const params = await segmentData.params
-  const userId = params.id
+  const userId = params.id    
 
   if (!userId) {
     return NextResponse.json({ error: 'User ID is required' }, { status: 400 })

@@ -109,7 +109,7 @@ export function Header() {
 											<SheetTitle className="text-left">Profile actions</SheetTitle>
 										</SheetHeader>
 										<div className="mt-4 space-y-4">
-											<Button variant="ghost" className="w-full justify-start" onClick={() => router.push('/profile')}>
+											<Button variant="ghost" className="w-full justify-start" onClick={() => router.push(`/users/${data.id}`)}>
 												<User className="mr-2 h-5 w-5" />
 												My Profile
 											</Button>
@@ -198,7 +198,7 @@ export function Header() {
 											</Button>
 										</DropdownMenuTrigger>
 										<DropdownMenuContent align="end">
-											<DropdownMenuItem onClick={() => router.push('/profile')}>
+											<DropdownMenuItem onClick={() => router.push(`/users/${data.id}`)}>
 												<User className="mr-2 h-4 w-4" />
 												<span>My Profile</span>
 											</DropdownMenuItem>

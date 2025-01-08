@@ -1,4 +1,4 @@
-import { Post } from '@/actions/posts/posts.types'
+import { Post } from '@/actions/post/posts.types'
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { CalendarIcon, EyeIcon, UserIcon } from 'lucide-react'

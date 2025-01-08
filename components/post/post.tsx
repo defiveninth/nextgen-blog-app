@@ -1,13 +1,13 @@
 'use client'
 
-import { usePost } from '@/actions/posts/post'
-import { useParams } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Skeleton } from "@/components/ui/skeleton"
+import { usePost } from '@/actions/post/post'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { CalendarIcon, UserIcon, EyeIcon } from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 import { parseContent } from '@/lib/parse-content'
+import { CalendarIcon, EyeIcon, UserIcon } from 'lucide-react'
+import { useParams } from 'next/navigation'
 
 function formatDate(dateString: string): string {
 	const date = new Date(dateString)

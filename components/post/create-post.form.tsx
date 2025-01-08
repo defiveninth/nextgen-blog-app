@@ -1,7 +1,7 @@
 'use client'
 
 import useCategories from '@/actions/categories/get-all'
-import useCreatePost from '@/actions/posts/create'
+import useCreatePost from '@/actions/post/create'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

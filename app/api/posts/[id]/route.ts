@@ -4,6 +4,7 @@ import pool from '@/lib/db'
 type Params = Promise<{ id: string }>
 
 export async function GET(
+	request: Request,
 	segmentData: { params: Params }
 ) {
 	const params = await segmentData.params

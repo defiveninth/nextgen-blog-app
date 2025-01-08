@@ -1,6 +1,7 @@
 import { Post } from '@/actions/post/posts.types'
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import formatDate from '@/lib/data-formatter'
 import { CalendarIcon, EyeIcon, UserIcon } from 'lucide-react'
 import Link from 'next/link'
 
@@ -8,14 +9,7 @@ interface PostItemProps {
 	post: Post
 }
 
-function formatDate(dateString: string): string {
-	const date = new Date(dateString)
-	return date.toLocaleDateString('en-GB', {
-		day: '2-digit',
-		month: '2-digit',
-		year: 'numeric'
-	}).split('/').join('.')
-}
+
 
 export function PostItem({ post }: PostItemProps) {
 	return (

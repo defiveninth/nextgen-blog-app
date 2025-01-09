@@ -1,3 +1,4 @@
+import Categories from '@/components/categories/categories'
 import { Header } from '@/components/common/header'
 
 export default function CategoriesPage() {
@@ -5,7 +6,7 @@ export default function CategoriesPage() {
 		<>
 			<Header />
 			<div className="container mx-auto max-w-[1080px] pb-10">
-
+				<Categories />
 			</div>
 		</>
 	)

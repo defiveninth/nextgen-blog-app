@@ -21,7 +21,7 @@ export default function PostPage() {
 	const [isCopied, setIsCopied] = useState(false)
 
 	const { increment } = useIncrementViewCount()
-	useEffect(() => increment(id as string), [])
+	useEffect(() => increment(id as string), [id, increment])
 
 	if (loading) {
 		return (

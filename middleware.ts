@@ -8,5 +8,9 @@ export function middleware(request: NextRequest) {
 		return NextResponse.redirect(new URL('/', request.url))
 	}
 
+	if (request.nextUrl.pathname.startsWith('/settings') && !isAuthorized) {
+		return NextResponse.redirect(new URL('/', request.url))
+	}
+
 	NextResponse.next()
 }

@@ -8,9 +8,12 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { useCheckUsername } from '@/actions/settings/username-check'
 
 export default function PublicDataSettings() {
 	const { settings, isLoading, isError } = useMyPublicSettings()
+	const { check: checkUsername, isLoading: isChecking, isAvailable, error: checkError } = useCheckUsername()
+
 	const [formData, setFormData] = useState({
 		name: '',
 		username: '',
@@ -35,6 +38,10 @@ export default function PublicDataSettings() {
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target
 		setFormData(prev => ({ ...prev, [name]: value }))
+
+		if (name === 'username' && value !== settings?.username) {
+			checkUsername(value)
+		}
 	}
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -111,6 +118,27 @@ export default function PublicDataSettings() {
 							onChange={handleInputChange}
 							placeholder="Your username"
 						/>
+						{formData.username !== settings?.username && (
+							<small
+								className={`text-sm ${isChecking
+										? 'text-gray-600'
+										: isAvailable
+											? 'text-green-600'
+											: checkError
+												? 'text-red-600'
+												: 'text-red-600'
+									}`}
+							>
+								{isChecking
+									? 'Checking availability...'
+									: isAvailable
+										? 'Username is available!'
+										: checkError
+											? 'Error checking username availability.'
+											: 'Username is already taken.'}
+							</small>
+						)}
+
 					</div>
 					<div className="space-y-2">
 						<Label htmlFor="email">Email</Label>

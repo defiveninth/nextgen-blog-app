@@ -5,18 +5,10 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import formatDate from '@/lib/data-formatter'
 import { parseContent } from '@/lib/parse-content'
 import { CalendarIcon, EyeIcon, UserIcon } from 'lucide-react'
 import { useParams } from 'next/navigation'
-
-function formatDate(dateString: string): string {
-	const date = new Date(dateString)
-	return date.toLocaleDateString('en-GB', {
-		day: '2-digit',
-		month: '2-digit',
-		year: 'numeric'
-	}).split('/').join('.')
-}
 
 export default function PostPage() {
 	const { id } = useParams()

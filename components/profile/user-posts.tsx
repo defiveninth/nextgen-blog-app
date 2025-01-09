@@ -1,6 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
+import Link from 'next/link'
 import { useUserPosts } from '@/actions/users/user-posts'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -51,30 +52,32 @@ export default function UserPosts() {
 			{posts && posts.length > 0 ? (
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{posts.map((post) => (
-						<Card key={post.id} className="flex flex-col">
-							<CardHeader>
-								<CardTitle className="text-lg">{post.title}</CardTitle>
-							</CardHeader>
-							<CardContent className="flex-grow">
-								<p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{post.content_preview}</p>
-								<div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-									<span>Created: {new Date(post.createdAt).toLocaleDateString()}</span>
-									<span className="flex items-center">
-										<Eye className="h-4 w-4 mr-1" />
-										{post.viewCount}
-									</span>
-								</div>
-							</CardContent>
-							<div className="px-4 pb-4">
-								{post.tags && post.tags.length > 0 && (
-									<div className="flex flex-wrap gap-2 mt-2">
-										{post.tags.map((tag, index) => (
-											<Badge key={index} variant="secondary">{tag}</Badge>
-										))}
+						<Link href={`/posts/${post.id}`} key={post.id} className="group">
+							<Card className="flex flex-col h-full transition-shadow hover:shadow-md">
+								<CardHeader>
+									<CardTitle className="text-lg group-hover:underline">{post.title}</CardTitle>
+								</CardHeader>
+								<CardContent className="flex-grow">
+									<p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{post.content_preview}</p>
+									<div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+										<span>Created: {new Date(post.createdAt).toLocaleDateString()}</span>
+										<span className="flex items-center">
+											<Eye className="h-4 w-4 mr-1" />
+											{post.viewCount}
+										</span>
 									</div>
-								)}
-							</div>
-						</Card>
+								</CardContent>
+								<div className="px-4 pb-4">
+									{post.tags && post.tags.length > 0 && (
+										<div className="flex flex-wrap gap-2 mt-2">
+											{post.tags.map((tag, index) => (
+												<Badge key={index} variant="secondary">{tag}</Badge>
+											))}
+										</div>
+									)}
+								</div>
+							</Card>
+						</Link>
 					))}
 				</div>
 			) : (

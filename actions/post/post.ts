@@ -5,10 +5,12 @@ export function usePost(id: string) {
 	const [post, setPost] = useState<Post | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
+	const [isThisMyPost, setIsThisMyPost] = useState<boolean>(false)
 
 	useEffect(() => {
 		async function fetchPost() {
 			setLoading(true)
+			setIsThisMyPost(false)
 			try {
 				const response = await fetch(`/api/posts/${id}`)
 				if (!response.ok) {

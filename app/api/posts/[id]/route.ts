@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server'
 import pool from '@/lib/db'
+import { cookies } from 'next/headers'
+import { verifyAccessToken } from '@/lib/jwt'
+
+const secret = process.env.JWT_SECRET || 'default_secret'
 
 type Params = Promise<{ id: string }>
 
@@ -8,11 +12,24 @@ export async function GET(
 	segmentData: { params: Params }
 ) {
 	const params = await segmentData.params
-	const id = params.id
+	const postId = params.id
 
-
-	if (!id) {
+	if (!postId) {
 		return NextResponse.json({ error: 'Post ID is required' }, { status: 400 })
+	}
+
+	const cookieStore = await cookies()
+	const authToken = cookieStore.get('authtoken')?.value
+
+	let userIdFromToken: string | null = null
+
+	if (authToken) {
+		try {
+			const decodedToken = verifyAccessToken(authToken, secret)
+			userIdFromToken = decodedToken?.id || null
+		} catch (error) {
+			console.error('Error verifying access token:', error)
+		}
 	}
 
 	const query = `
@@ -24,6 +41,7 @@ export async function GET(
         posts."createdAt",
         posts."updatedAt",
         posts."viewCount",
+        posts."authorId",
         json_build_object('id', users.id, 'name', users.name, 'username', users.username) AS author,
         COALESCE(json_agg(DISTINCT jsonb_build_object('name', tags.name)) FILTER (WHERE tags.name IS NOT NULL), '[]') AS tags,
         json_build_object('id', categories.id, 'name', categories.name) AS category
@@ -38,13 +56,21 @@ export async function GET(
 
 	const client = await pool.connect()
 	try {
-		const result = await client.query(query, [id])
+		const result = await client.query(query, [postId])
 
 		if (result.rowCount === 0) {
 			return NextResponse.json({ error: 'Post not found' }, { status: 404 })
 		}
 
-		return NextResponse.json(result.rows[0])
+		const post = result.rows[0]
+		const isThisMyPost = post.authorId === userIdFromToken
+
+		delete post.authorId
+
+		return NextResponse.json({
+			...post,
+			isThisMyPost,
+		})
 	} catch (error) {
 		console.error('Error fetching post:', error)
 		return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -52,4 +78,3 @@ export async function GET(
 		client.release()
 	}
 }
-

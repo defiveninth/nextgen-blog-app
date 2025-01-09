@@ -1,5 +1,6 @@
 'use client'
 
+import { useIncrementViewCount } from '@/actions/post/increment-view'
 import { usePost } from '@/actions/post/post'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
@@ -11,13 +12,16 @@ import formatDate from '@/lib/data-formatter'
 import { parseContent } from '@/lib/parse-content'
 import { CalendarIcon, ClipboardCopyIcon, EditIcon, EyeIcon, FlagIcon, MoreVerticalIcon, TrashIcon, UserIcon } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function PostPage() {
 	const { id } = useParams()
 	const router = useRouter()
 	const { post, loading, error, isThisMyPost } = usePost(id as string)
 	const [isCopied, setIsCopied] = useState(false)
+
+	const { increment } = useIncrementViewCount()
+	useEffect(() => increment(id as string), [])
 
 	if (loading) {
 		return (

@@ -6,13 +6,15 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { AlertCircle, Loader2 } from 'lucide-react'
+import { AlertCircle, Loader } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useCheckUsername } from '@/actions/settings/username-check'
+import { useUpdateSettings } from '@/actions/settings/save-public-settings'
 
 export default function PublicDataSettings() {
 	const { settings, isLoading, isError } = useMyPublicSettings()
 	const { check: checkUsername, isLoading: isChecking, isAvailable, error: checkError } = useCheckUsername()
+	const { isUpdating, updateError, updateSuccess, updateSettings } = useUpdateSettings()
 
 	const [formData, setFormData] = useState({
 		name: '',
@@ -20,9 +22,6 @@ export default function PublicDataSettings() {
 		email: '',
 		avatar: '',
 	})
-	const [isSaving, setIsSaving] = useState(false)
-	const [saveError, setSaveError] = useState<string | null>(null)
-	const [saveSuccess, setSaveSuccess] = useState(false)
 
 	useEffect(() => {
 		if (settings) {
@@ -46,37 +45,13 @@ export default function PublicDataSettings() {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		setIsSaving(true)
-		setSaveError(null)
-		setSaveSuccess(false)
-
-		try {
-			const response = await fetch('/api/settings', {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(formData),
-			})
-
-			if (!response.ok) {
-				const errorData = await response.json()
-				throw new Error(errorData.error || 'Failed to update settings')
-			}
-
-			setSaveSuccess(true)
-		} catch (error) {
-			console.error('Error updating settings:', error)
-			setSaveError(error instanceof Error ? error.message : 'An unknown error occurred')
-		} finally {
-			setIsSaving(false)
-		}
+		await updateSettings(formData)
 	}
 
 	if (isLoading) {
 		return (
 			<div className="flex justify-center items-center h-64">
-				<Loader2 className="h-8 w-8 animate-spin" />
+				<Loader className="h-8 w-8 animate-spin" />
 			</div>
 		)
 	}
@@ -121,12 +96,12 @@ export default function PublicDataSettings() {
 						{formData.username !== settings?.username && (
 							<small
 								className={`text-sm ${isChecking
-										? 'text-gray-600'
-										: isAvailable
-											? 'text-green-600'
-											: checkError
-												? 'text-red-600'
-												: 'text-red-600'
+									? 'text-gray-600'
+									: isAvailable
+										? 'text-green-600'
+										: checkError
+											? 'text-red-600'
+											: 'text-red-600'
 									}`}
 							>
 								{isChecking
@@ -138,7 +113,6 @@ export default function PublicDataSettings() {
 											: 'Username is already taken.'}
 							</small>
 						)}
-
 					</div>
 					<div className="space-y-2">
 						<Label htmlFor="email">Email</Label>
@@ -164,23 +138,23 @@ export default function PublicDataSettings() {
 					</div>
 				</CardContent>
 				<CardFooter className="flex flex-col items-start space-y-4">
-					{saveError && (
+					{updateError && (
 						<Alert variant="destructive" className="w-full">
 							<AlertCircle className="h-4 w-4" />
 							<AlertTitle>Error</AlertTitle>
-							<AlertDescription>{saveError}</AlertDescription>
+							<AlertDescription>{updateError}</AlertDescription>
 						</Alert>
 					)}
-					{saveSuccess && (
-						<Alert variant="default" className="w-full bg-green-50 text-green-800 border-green-300">
+					{updateSuccess && (
+						<Alert variant="default" className="w-full">
 							<AlertTitle>Success</AlertTitle>
 							<AlertDescription>Your settings have been updated successfully.</AlertDescription>
 						</Alert>
 					)}
-					<Button type="submit" disabled={isSaving} className="w-full">
-						{isSaving ? (
+					<Button type="submit" disabled={isUpdating} className="w-full">
+						{isUpdating ? (
 							<>
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+								<Loader className="mr-2 h-4 w-4 animate-spin" />
 								Saving...
 							</>
 						) : (

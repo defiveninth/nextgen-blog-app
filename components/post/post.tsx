@@ -21,10 +21,10 @@ export default function PostPage() {
 
 	if (loading) {
 		return (
-			<div className="container mx-auto px-4 py-8">
-				<Skeleton className="h-12 w-3/4 mb-4" />
-				<Skeleton className="h-4 w-1/2 mb-8" />
-				<div className="space-y-4">
+			<div className="container mx-auto px-4 py-4 sm:py-8">
+				<Skeleton className="h-8 sm:h-12 w-full sm:w-3/4 mb-2 sm:mb-4" />
+				<Skeleton className="h-4 w-full sm:w-1/2 mb-4 sm:mb-8" />
+				<div className="space-y-2 sm:space-y-4">
 					<Skeleton className="h-4 w-full" />
 					<Skeleton className="h-4 w-full" />
 					<Skeleton className="h-4 w-3/4" />
@@ -35,7 +35,7 @@ export default function PostPage() {
 
 	if (error) {
 		return (
-			<div className="container mx-auto px-4 py-8">
+			<div className="container mx-auto px-4 py-4 sm:py-8">
 				<Alert variant="destructive">
 					<AlertTitle>Error</AlertTitle>
 					<AlertDescription>{error}</AlertDescription>
@@ -46,7 +46,7 @@ export default function PostPage() {
 
 	if (!post) {
 		return (
-			<div className="container mx-auto px-4 py-8">
+			<div className="container mx-auto px-4 py-4 sm:py-8">
 				<Alert>
 					<AlertTitle>Not Found</AlertTitle>
 					<AlertDescription>The requested post could not be found.</AlertDescription>
@@ -79,44 +79,44 @@ export default function PostPage() {
 	}
 
 	return (
-		<div className="container mx-auto px-4 py-8">
-			<Card>
-				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<CardTitle className="text-3xl">{parsedTitle}</CardTitle>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" className="h-8 w-8 p-0">
-								<span className="sr-only">Open menu</span>
-								<MoreVerticalIcon className="h-4 w-4" />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
-							<DropdownMenuItem onClick={copyUrl}>
-								<ClipboardCopyIcon className="mr-2 h-4 w-4" />
-								<span>{isCopied ? 'Copied!' : 'Copy URL'}</span>
-							</DropdownMenuItem>
-							{isThisMyPost ? (
-								<>
-									<DropdownMenuItem onClick={editPost}>
-										<EditIcon className="mr-2 h-4 w-4" />
-										<span>Edit</span>
-									</DropdownMenuItem>
-									<DropdownMenuItem onClick={deletePost}>
-										<TrashIcon className="mr-2 h-4 w-4" />
-										<span>Delete</span>
-									</DropdownMenuItem>
-								</>
-							) : (
-								<DropdownMenuItem onClick={reportPost}>
-									<FlagIcon className="mr-2 h-4 w-4" />
-									<span>Report</span>
+		<div className="container mx-auto px-4 py-4 sm:py-8">
+			<Card className="overflow-hidden">
+				<CardHeader className="space-y-0 pb-2">
+					<div className="flex items-start justify-between">
+						<CardTitle className="text-2xl sm:text-3xl leading-tight mb-2">{parsedTitle}</CardTitle>
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="ghost" className="h-8 w-8 p-0">
+									<span className="sr-only">Open menu</span>
+									<MoreVerticalIcon className="h-4 w-4" />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align="end">
+								<DropdownMenuItem onClick={copyUrl}>
+									<ClipboardCopyIcon className="mr-2 h-4 w-4" />
+									<span>{isCopied ? 'Copied!' : 'Copy URL'}</span>
 								</DropdownMenuItem>
-							)}
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</CardHeader>
-				<CardHeader>
-					<div className="flex items-center space-x-4 text-sm text-muted-foreground">
+								{isThisMyPost ? (
+									<>
+										<DropdownMenuItem onClick={editPost}>
+											<EditIcon className="mr-2 h-4 w-4" />
+											<span>Edit</span>
+										</DropdownMenuItem>
+										<DropdownMenuItem onClick={deletePost}>
+											<TrashIcon className="mr-2 h-4 w-4" />
+											<span>Delete</span>
+										</DropdownMenuItem>
+									</>
+								) : (
+									<DropdownMenuItem onClick={reportPost}>
+										<FlagIcon className="mr-2 h-4 w-4" />
+										<span>Report</span>
+									</DropdownMenuItem>
+								)}
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
+					<div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
 						<div className="flex items-center">
 							<UserIcon className="mr-1 h-3 w-3" />
 							<span>{post.author.name}</span>
@@ -132,18 +132,18 @@ export default function PostPage() {
 					</div>
 				</CardHeader>
 				<CardContent>
-					<div className="prose max-w-none">{parsedContent}</div>
+					<div className="prose prose-sm sm:prose max-w-none">{parsedContent}</div>
 				</CardContent>
 				<CardFooter className="flex flex-col items-start gap-4">
 					<div className="flex flex-wrap gap-2">
 						{post.tags.map((tag) => (
-							<Badge key={tag.name} variant="secondary">
+							<Badge key={tag.name} variant="secondary" className="text-xs sm:text-sm">
 								#{tag.name.replace(/([A-Z])/g, ' $1').trim()}
 							</Badge>
 						))}
 					</div>
 					{post.category && (
-						<Badge variant="outline">
+						<Badge variant="outline" className="text-xs sm:text-sm">
 							{post.category.name.replace(/([A-Z])/g, ' $1').trim()}
 						</Badge>
 					)}

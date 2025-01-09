@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className="container mx-auto max-w-[1080px] pb-10">
+      <div className="container mx-auto w-full max-w-[1080px] pb-10">
         <CurrencyTicker />
         <CreatePostForm />
         <PostList />

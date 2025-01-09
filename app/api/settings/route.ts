@@ -5,8 +5,7 @@ import { verifyAccessToken } from '@/lib/jwt'
 
 const secret = process.env.JWT_SECRET || 'default_secret'
 
-export async function GET(
-) {
+export async function GET() {
 	const cookieStore = await cookies()
 	const authToken = cookieStore.get('authtoken')?.value
 

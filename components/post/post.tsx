@@ -3,16 +3,21 @@
 import { usePost } from '@/actions/post/post'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Skeleton } from "@/components/ui/skeleton"
 import formatDate from '@/lib/data-formatter'
 import { parseContent } from '@/lib/parse-content'
-import { CalendarIcon, EyeIcon, UserIcon } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { CalendarIcon, ClipboardCopyIcon, EditIcon, EyeIcon, FlagIcon, MoreVerticalIcon, TrashIcon, UserIcon } from 'lucide-react'
+import { useParams, useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function PostPage() {
 	const { id } = useParams()
-	const { post, loading, error } = usePost(id as string)
+	const router = useRouter()
+	const { post, loading, error, isThisMyPost } = usePost(id as string)
+	const [isCopied, setIsCopied] = useState(false)
 
 	if (loading) {
 		return (
@@ -53,11 +58,64 @@ export default function PostPage() {
 	const parsedTitle = parseContent(post.title)
 	const parsedContent = parseContent(post.content)
 
+	const copyUrl = () => {
+		navigator.clipboard.writeText(window.location.href)
+		setIsCopied(true)
+		setTimeout(() => setIsCopied(false), 2000)
+	}
+
+	const editPost = () => {
+		router.push(`/posts/${id}/edit`)
+	}
+
+	const deletePost = () => {
+		// Implement delete functionality
+		console.log('Delete post')
+	}
+
+	const reportPost = () => {
+		// Implement report functionality
+		console.log('Report post')
+	}
+
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<Card>
-				<CardHeader>
+				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
 					<CardTitle className="text-3xl">{parsedTitle}</CardTitle>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant="ghost" className="h-8 w-8 p-0">
+								<span className="sr-only">Open menu</span>
+								<MoreVerticalIcon className="h-4 w-4" />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end">
+							<DropdownMenuItem onClick={copyUrl}>
+								<ClipboardCopyIcon className="mr-2 h-4 w-4" />
+								<span>{isCopied ? 'Copied!' : 'Copy URL'}</span>
+							</DropdownMenuItem>
+							{isThisMyPost ? (
+								<>
+									<DropdownMenuItem onClick={editPost}>
+										<EditIcon className="mr-2 h-4 w-4" />
+										<span>Edit</span>
+									</DropdownMenuItem>
+									<DropdownMenuItem onClick={deletePost}>
+										<TrashIcon className="mr-2 h-4 w-4" />
+										<span>Delete</span>
+									</DropdownMenuItem>
+								</>
+							) : (
+								<DropdownMenuItem onClick={reportPost}>
+									<FlagIcon className="mr-2 h-4 w-4" />
+									<span>Report</span>
+								</DropdownMenuItem>
+							)}
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</CardHeader>
+				<CardHeader>
 					<div className="flex items-center space-x-4 text-sm text-muted-foreground">
 						<div className="flex items-center">
 							<UserIcon className="mr-1 h-3 w-3" />
@@ -76,16 +134,16 @@ export default function PostPage() {
 				<CardContent>
 					<div className="prose max-w-none">{parsedContent}</div>
 				</CardContent>
-				<CardFooter className="flex flex-col items-start gap-2">
+				<CardFooter className="flex flex-col items-start gap-4">
 					<div className="flex flex-wrap gap-2">
 						{post.tags.map((tag) => (
-							<Badge key={tag.name} variant="secondary" className="">
+							<Badge key={tag.name} variant="secondary">
 								#{tag.name.replace(/([A-Z])/g, ' $1').trim()}
 							</Badge>
 						))}
 					</div>
 					{post.category && (
-						<Badge variant="outline" className="mt-2">
+						<Badge variant="outline">
 							{post.category.name.replace(/([A-Z])/g, ' $1').trim()}
 						</Badge>
 					)}

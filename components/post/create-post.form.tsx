@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+import { Loader } from 'lucide-react'
 import { useState } from 'react'
 
 export default function CreatePostForm() {
@@ -92,7 +93,10 @@ export default function CreatePostForm() {
 			</div>
 
 			<Button type="submit" className="w-full" disabled={creatingPost}>
-				{creatingPost ? 'Creating Post...' : 'Create Post'}
+				{creatingPost ? <>
+					<Loader className='animate-spin' />
+					<span>Creating post...</span>
+				</> : 'Create Post'}
 			</Button>
 		</form>
 	)

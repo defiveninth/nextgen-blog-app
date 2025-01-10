@@ -9,8 +9,6 @@ interface PostItemProps {
 	post: Post
 }
 
-
-
 export function PostItem({ post }: PostItemProps) {
 	return (
 		<Link href={`/posts/${post.id}`} className="block hover:no-underline">

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 type PostData = {
 	title: string
@@ -16,6 +17,7 @@ type UseCreatePostReturn = {
 export default function useCreatePost(): UseCreatePostReturn {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
+	const router = useRouter()
 
 	const createPost = async (postData: PostData) => {
 		setIsLoading(true)
@@ -36,7 +38,7 @@ export default function useCreatePost(): UseCreatePostReturn {
 			}
 
 			const data = await response.json()
-			console.log('Post created successfully:', data)
+			router.push(`/posts/${data.postId}`)
 		} catch (err: unknown) {
 			if (err instanceof Error) {
 				setError(err.message)

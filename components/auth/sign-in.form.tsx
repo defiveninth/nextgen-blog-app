@@ -13,7 +13,7 @@ import useSignIn from '@/actions/auth/sign-in'
 
 export default function SignInForm() {
 	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('123456789')
+	const [password, setPassword] = useState('')
 	const { isLoading, error, signIn } = useSignIn()
 	const router = useRouter()
 

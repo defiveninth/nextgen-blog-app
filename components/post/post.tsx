@@ -89,7 +89,6 @@ export default function PostPage() {
 	}
 
 	const reportPost = () => {
-		// Implement report functionality
 		console.log('Report post')
 	}
 

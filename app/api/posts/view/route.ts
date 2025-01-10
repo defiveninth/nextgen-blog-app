@@ -6,6 +6,7 @@ export async function POST(req: Request) {
 	try {
 		body = await req.json()
 	} catch (error) {
+		console.log(error)
 		return NextResponse.json({ error: 'Invalid request body.' }, { status: 400 })
 	}
 

@@ -55,6 +55,7 @@ export async function PUT(request: Request) {
 		const decoded = verifyAccessToken(authToken.value, secret)
 		userId = decoded.id
 	} catch (error) {
+		console.log(error)
 		return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 })
 	}
 

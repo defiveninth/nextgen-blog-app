@@ -2,6 +2,7 @@
 
 import { useIncrementViewCount } from '@/actions/post/increment-view'
 import { usePost } from '@/actions/post/post'
+import { useRemovePost } from '@/actions/post/remove'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -21,7 +22,17 @@ export default function PostPage() {
 	const [isCopied, setIsCopied] = useState(false)
 
 	const { increment } = useIncrementViewCount()
-	useEffect(() => increment(id as string), [id, increment])
+	const { removePost, isRemoving, error: removeError } = useRemovePost()
+
+	useEffect(() => {
+		increment(id as string)
+	}, [id, increment])
+
+	useEffect(() => {
+		if (!loading && !post && !error) {
+			router.replace('/')
+		}
+	}, [loading, post, error, router])
 
 	if (loading) {
 		return (
@@ -72,9 +83,9 @@ export default function PostPage() {
 		router.push(`/posts/${id}/edit`)
 	}
 
-	const deletePost = () => {
-		// Implement delete functionality
-		console.log('Delete post')
+	const deletePost = async () => {
+		await removePost(id as string)
+		router.replace('/')
 	}
 
 	const reportPost = () => {
@@ -106,9 +117,9 @@ export default function PostPage() {
 											<EditIcon className="mr-2 h-4 w-4" />
 											<span>Edit</span>
 										</DropdownMenuItem>
-										<DropdownMenuItem onClick={deletePost}>
+										<DropdownMenuItem onClick={deletePost} disabled={isRemoving}>
 											<TrashIcon className="mr-2 h-4 w-4" />
-											<span>Delete</span>
+											<span>{isRemoving ? 'Deleting...' : 'Delete'}</span>
 										</DropdownMenuItem>
 									</>
 								) : (
@@ -153,7 +164,13 @@ export default function PostPage() {
 					)}
 				</CardFooter>
 			</Card>
+
+			{removeError && (
+				<Alert variant="destructive" className="mt-4">
+					<AlertTitle>Error</AlertTitle>
+					<AlertDescription>{removeError}</AlertDescription>
+				</Alert>
+			)}
 		</div>
 	)
 }
-

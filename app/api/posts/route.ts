@@ -1,5 +1,9 @@
 import pool from '@/lib/db'
-import { NextResponse } from 'next/server'
+import { verifyAccessToken } from '@/lib/jwt'
+import { cookies } from 'next/headers'
+import { NextRequest, NextResponse } from 'next/server'
+
+const secret = process.env.JWT_SECRET || 'DEFAULT_SECRET'
 
 export async function GET() {
 	try {
@@ -35,5 +39,43 @@ export async function GET() {
 	} catch (error) {
 		console.error('Error fetching posts:', error)
 		return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 })
+	}
+}
+
+export async function DELETE(req: NextRequest) {
+	const cookieStore = await cookies()
+	const authToken = cookieStore.get('authtoken')?.value
+
+	let userId
+	if (authToken) {
+		try {
+			const decoded = verifyAccessToken(authToken, secret)
+			userId = decoded.id
+		} catch (error) {
+			console.error('Error verifying auth token:', error)
+			return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+		}
+	} else {
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+	}
+
+	const { id } = await req.json()
+
+	if (!id) return NextResponse.json({ error: 'Post ID is required' }, { status: 400 })
+
+	try {
+		const result = await pool.query(
+			'DELETE FROM posts WHERE id = $1 AND "authorId" = $2 RETURNING id',
+			[id, userId]
+		)
+
+		if (result.rowCount === 0) {
+			return NextResponse.json({ error: 'Post not found or not authorized to delete' }, { status: 404 })
+		}
+
+		return NextResponse.json({ message: 'Post deleted successfully' }, { status: 200 })
+	} catch (error) {
+		console.error('Error deleting post:', error)
+		return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
 	}
 }

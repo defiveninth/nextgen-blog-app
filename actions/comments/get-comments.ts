@@ -18,7 +18,7 @@ type UseCommentsResult = {
 
 const useComments = (postId: string): UseCommentsResult => {
 	const [comments, setComments] = useState<Comment[] | null>(null)
-	const [loading, setLoading] = useState<boolean>(false)
+	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {

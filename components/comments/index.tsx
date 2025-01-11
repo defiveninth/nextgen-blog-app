@@ -7,10 +7,30 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from 'lucide-react'
 import Comment from './comment'
 import CommentSkeleton from './comment-skeleton'
+import { useEffect, useState } from 'react'
 
 export default function CommentsPage() {
 	const { id } = useParams()
 	const { comments, loading, error } = useComments(id as string)
+	const [localComments, setLocalComments] = useState(comments)
+
+	useEffect(() => {
+		if (comments) {
+			setLocalComments(comments)
+		}
+	}, [comments])
+
+	const handleRemove = async (commentId: string) => {
+		// Here you would typically call an API to remove the comment
+		// For now, we'll just remove it from the local state
+		setLocalComments((prevComments) =>
+			prevComments ? prevComments.filter(comment => comment.id !== commentId) : null
+		)
+	}
+
+	const handleReport = async (commentId: string) => {
+		console.log(`Reported comment: ${commentId}`)
+	}
 
 	if (error) {
 		return (
@@ -32,9 +52,14 @@ export default function CommentsPage() {
 					Array.from({ length: 3 }).map((_, index) => (
 						<CommentSkeleton key={index} />
 					))
-				) : comments && comments.length > 0 ? (
-					comments.map((comment) => (
-						<Comment key={comment.id} comment={comment} />
+				) : localComments && localComments.length > 0 ? (
+					localComments.map((comment) => (
+						<Comment
+							key={comment.id}
+							comment={comment}
+							onRemove={handleRemove}
+							onReport={handleReport}
+						/>
 					))
 				) : (
 					<p className="text-center text-muted-foreground">No comments yet.</p>

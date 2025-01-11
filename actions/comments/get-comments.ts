@@ -32,7 +32,7 @@ const useComments = (postId: string): UseCommentsResult => {
 			setError(null)
 
 			try {
-				const response = await fetch(`/api/posts/${postId}/comments`, {
+				const response = await fetch(`/api/comments/${postId}`, {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json',

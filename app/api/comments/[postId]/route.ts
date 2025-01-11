@@ -44,7 +44,7 @@ export async function GET(
 
 		const enrichedComments = rows.map((comment: any) => ({
 			...comment,
-			isItMine: userId === comment.authorId, // Add `isItMine` attribute
+			isItMine: userId === comment.authorId,
 		}))
 
 		return NextResponse.json(enrichedComments, { status: 200 })

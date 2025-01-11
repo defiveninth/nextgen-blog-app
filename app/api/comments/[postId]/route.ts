@@ -1,3 +1,4 @@
+import { Comment } from '@/actions/comments/get-comments'
 import pool from '@/lib/db'
 import { verifyAccessToken } from '@/lib/jwt'
 import { cookies } from 'next/headers'
@@ -42,10 +43,11 @@ export async function GET(
 	try {
 		const { rows } = await pool.query(query, [postId])
 
-		const enrichedComments = rows.map((comment: any) => ({
+		const enrichedComments = (rows as Comment[]).map((comment) => ({
 			...comment,
 			isItMine: userId === comment.authorId,
 		}))
+
 
 		return NextResponse.json(enrichedComments, { status: 200 })
 	} catch (error) {

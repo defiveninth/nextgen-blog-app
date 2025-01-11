@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation'
 
-export function parseContent(content: string) {
+export function ParseContent(content: string) {
 	const words = content.split(/\s+/)
 	const router = useRouter()
 

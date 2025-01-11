@@ -10,7 +10,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Skeleton } from "@/components/ui/skeleton"
 import formatDate from '@/lib/data-formatter'
-import { parseContent } from '@/lib/parse-content'
+import { ParseContent } from '@/lib/parse-content'
 import { CalendarIcon, ClipboardCopyIcon, EditIcon, EyeIcon, FlagIcon, MoreVerticalIcon, TrashIcon, UserIcon } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -70,8 +70,8 @@ export default function PostPage() {
 		)
 	}
 
-	const parsedTitle = parseContent(post.title)
-	const parsedContent = parseContent(post.content)
+	const parsedTitle = ParseContent(post.title)
+	const parsedContent = ParseContent(post.content)
 
 	const copyUrl = () => {
 		navigator.clipboard.writeText(window.location.href)

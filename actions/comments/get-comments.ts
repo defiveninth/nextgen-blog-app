@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-type Comment = {
+export type Comment = {
 	id: string
 	content: string
 	createdAt: string

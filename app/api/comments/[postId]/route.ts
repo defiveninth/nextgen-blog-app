@@ -1,0 +1,91 @@
+import pool from '@/lib/db'
+import { verifyAccessToken } from '@/lib/jwt'
+import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
+
+type Params = Promise<{ postId: string }>
+const secret = process.env.JWT_SECRET || 'DEFAULT_SECRET'
+
+export async function GET(
+	request: Request,
+	segmentData: { params: Params }
+) {
+	const params = await segmentData.params
+	const postId = params.postId
+
+	const authToken = (await cookies()).get('authtoken')
+	let userId: string | null = null
+
+	if (authToken?.value) {
+		try {
+			const payload = verifyAccessToken(authToken.value, secret)
+			userId = payload.id as string
+		} catch (error) {
+			console.warn('Invalid token provided, proceeding without authentication:', error)
+		}
+	}
+
+	const query = `
+    SELECT 
+      c.id, 
+      c."content", 
+      c."createdAt", 
+      u.id AS "authorId", 
+      u.name AS "authorName", 
+      u.username AS "authorUsername"
+    FROM comments c
+    INNER JOIN users u ON c."authorId" = u.id
+    WHERE c."postId" = $1
+    ORDER BY c."createdAt" DESC
+  `
+
+	try {
+		const { rows } = await pool.query(query, [postId])
+
+		const enrichedComments = rows.map((comment: any) => ({
+			...comment,
+			isItMine: userId === comment.authorId, // Add `isItMine` attribute
+		}))
+
+		return NextResponse.json(enrichedComments, { status: 200 })
+	} catch (error) {
+		console.error('Error fetching comments:', error)
+		return NextResponse.json({ error: 'Error fetching comments' }, { status: 500 })
+	}
+}
+
+
+export async function POST(
+	request: Request,
+	segmentData: { params: Params }
+) {
+	const params = await segmentData.params
+	const postId = params.postId
+	const { content } = await request.json()
+	const authtoken = (await cookies()).get('authtoken')
+
+	if (!authtoken) {
+		return NextResponse.json(
+			{ error: 'Only authorized users can leave comments' },
+			{ status: 401 }
+		)
+	}
+
+	if (!content) {
+		return NextResponse.json({ error: 'Content is required' }, { status: 400 })
+	}
+
+	const query = `
+    INSERT INTO comments ("postId", "content", "authorId")
+    VALUES ($1, $2, (SELECT id FROM users WHERE "authToken" = $3))
+    RETURNING id, "content", "createdAt"
+  	`
+	try {
+		const { rows } = await pool.query(query, [postId, content, authtoken.value])
+		const newComment = rows[0]
+		return NextResponse.json(newComment, { status: 201 })
+	} catch (error) {
+		console.error('Error adding comment:', error)
+		return NextResponse.json({ error: 'Error adding comment' }, { status: 500 })
+	}
+}

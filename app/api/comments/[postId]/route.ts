@@ -91,3 +91,51 @@ export async function POST(
 		return NextResponse.json({ error: 'Error adding comment' }, { status: 500 })
 	}
 }
+
+export async function DELETE(
+	request: Request,
+	segmentData: { params: Params }
+) {
+	const params = await segmentData.params
+	const commentId = params.postId
+	const authToken = (await cookies()).get('authtoken')
+
+	if (!authToken) {
+		return NextResponse.json(
+			{ error: 'You must be logged in to delete a comment.' },
+			{ status: 401 }
+		)
+	}
+
+	let userId: string | null = null
+	try {
+		const payload = verifyAccessToken(authToken.value, secret)
+		userId = payload.id as string
+	} catch (error) {
+		return NextResponse.json(
+			{ error: 'Invalid or expired token. Please log in again.' },
+			{ status: 401 }
+		)
+	}
+
+	const query = `
+    DELETE FROM comments 
+    WHERE id = $1 
+      AND "authorId" = $2
+  	`
+	try {
+		const { rows } = await pool.query(query, [commentId, userId])
+
+		if (rows.length === 0) {
+			return NextResponse.json(
+				{ error: 'Comment not found or you are not authorized to delete it.' },
+				{ status: 404 }
+			)
+		}
+
+		return NextResponse.json({ message: 'Comment deleted successfully.' }, { status: 200 })
+	} catch (error) {
+		console.error('Error deleting comment:', error)
+		return NextResponse.json({ error: 'Error deleting comment.' }, { status: 500 })
+	}
+}

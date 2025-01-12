@@ -10,9 +10,10 @@ type CommentProps = {
 	comment: CommentType
 	onRemove?: (id: string) => void
 	onReport?: (id: string) => void
+	isDeleting: string | boolean
 }
 
-export default function Comment({ comment, onRemove, onReport }: CommentProps) {
+export default function Comment({ comment, onRemove, onReport, isDeleting }: CommentProps) {
 	const handleAction = () => {
 		if (comment.isItMine && onRemove) {
 			onRemove(comment.id)
@@ -46,7 +47,7 @@ export default function Comment({ comment, onRemove, onReport }: CommentProps) {
 							{comment.isItMine ? (
 								<>
 									<Trash className="mr-2 h-4 w-4" />
-									<span>Remove</span>
+									{isDeleting ? 'Deleting...' : 'Delete'}
 								</>
 							) : (
 								<>
@@ -61,7 +62,7 @@ export default function Comment({ comment, onRemove, onReport }: CommentProps) {
 			<CardContent>
 				<p className="text-sm">{comment.content}</p>
 				<p className="text-xs text-muted-foreground mt-2">
-					{ formatDate(comment.createdAt) }
+					{formatDate(comment.createdAt)}
 				</p>
 			</CardContent>
 		</Card>

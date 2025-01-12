@@ -122,6 +122,7 @@ export async function DELETE(
     DELETE FROM comments 
     WHERE id = $1 
       AND "authorId" = $2
+	returning *
   	`
 	try {
 		const { rows } = await pool.query(query, [commentId, userId])

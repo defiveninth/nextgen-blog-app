@@ -112,6 +112,7 @@ export async function DELETE(
 		const payload = verifyAccessToken(authToken.value, secret)
 		userId = payload.id as string
 	} catch (error) {
+		console.log(error)
 		return NextResponse.json(
 			{ error: 'Invalid or expired token. Please log in again.' },
 			{ status: 401 }

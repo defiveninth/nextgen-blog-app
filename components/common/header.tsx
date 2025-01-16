@@ -69,6 +69,9 @@ export function Header() {
 											<input
 												className="w-full rounded-md border border-input bg-background px-10 py-2 text-sm"
 												placeholder="What are you looking for?"
+												value={searchValue}
+												onChange={(e) => setSearchValue(e.target.value)}
+												onClick={() => router.push('/search')}
 											/>
 										</div>
 									</div>
@@ -181,6 +184,7 @@ export function Header() {
 								value={searchValue}
 								onChange={(e) => setSearchValue(e.target.value)}
 								className="pl-8 pr-12"
+								onClick={() => router.push('/search')}
 							/>
 							<kbd className="pointer-events-none absolute right-2 top-2.5 select-none rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
 								/

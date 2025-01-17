@@ -36,7 +36,6 @@ export async function POST(request: Request) {
 		try {
 			await client.query('BEGIN')
 
-			// Insert the post and get its ID
 			const insertPostQuery = `
 				INSERT INTO posts (title, content, published, "authorId")
 				VALUES ($1, $2, $3, $4)
@@ -45,7 +44,6 @@ export async function POST(request: Request) {
 			const postResult = await client.query(insertPostQuery, [title, content, published, authorId])
 			const postId = postResult.rows[0].id
 
-			// Ensure category exists and get its ID
 			const findCategoryQuery = 'SELECT id FROM categories WHERE name = $1'
 			const categoryResult = await client.query(findCategoryQuery, [category])
 
@@ -62,7 +60,6 @@ export async function POST(request: Request) {
 				categoryId = categoryResult.rows[0].id
 			}
 
-			// Update the post with its category
 			const updatePostCategoryQuery = `
 				UPDATE posts
 				SET category_id = $1
@@ -70,7 +67,6 @@ export async function POST(request: Request) {
 			`
 			await client.query(updatePostCategoryQuery, [categoryId, postId])
 
-			// Extract unique tags from title and content
 			const tagPattern = /#(\w+)/g
 			const tags = new Set<string>()
 			for (const match of title.matchAll(tagPattern)) {
@@ -80,9 +76,7 @@ export async function POST(request: Request) {
 				tags.add(match[1].toLowerCase())
 			}
 
-			// Process tags
 			for (const tagName of tags) {
-				// Ensure the tag exists and get its ID
 				const findTagQuery = 'SELECT id FROM tags WHERE name = $1'
 				const tagResult = await client.query(findTagQuery, [tagName])
 
@@ -99,7 +93,6 @@ export async function POST(request: Request) {
 					tagId = tagResult.rows[0].id
 				}
 
-				// Associate tag with the post
 				const insertPostTagQuery = `
 					INSERT INTO post_tags (post_id, tag_id)
 					VALUES ($1, $2)

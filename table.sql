@@ -88,6 +88,14 @@ VALUES
   ('Agriculture'),
   ('Nutrition');
 
+
+INSERT INTO categories (name)
+VALUES 
+  ('Technology'),
+  ('Business'),
+  ...
+  ('Finances');
+
 DROP TABLE IF EXISTS post_categories;
 
 CREATE TABLE post_categories (

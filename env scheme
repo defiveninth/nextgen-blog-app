@@ -1,0 +1,14 @@
+DATABASE_URL="postgresql://username:password@e-queue.narxoz.kz:5432/de-blog-post-app?schema=public"
+
+DB_USERNAME=""
+DB_PASSWORD=""
+DB_URL="e-queue.narxoz.kz"
+DB_DATABASE="de-blog-post-app"
+DB_PORT="5432"
+
+EMAIL_USER=""
+EMAIL_PASSWORD=""
+
+APP_URL="http://192.168.56.1:3000"
+
+JWT_SECRET="SATOSHI_NAKAMOTO_ALIVE"

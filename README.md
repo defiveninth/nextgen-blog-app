@@ -31,7 +31,7 @@ Ensure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/SakenovAbdurrauf/blog-post-app.git
+   git clone https://github.com/defiveninth/blog-post-app.git
    cd blog-post-app
    ```
 

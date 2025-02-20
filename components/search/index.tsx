@@ -19,7 +19,7 @@ export default function SearchUser() {
 		if (query && !loading) {
 			searchUsers(query)
 		}
-	}, [query])
+	}, [query, loading, searchUsers])
 
 	const handleSearch = (e: React.FormEvent) => {
 		e.preventDefault()
